@@ -1,0 +1,45 @@
+.role-section{
+    height: 301px;
+    background-color: white;
+    border-radius: 8px;
+}
+.back-button{
+    margin-left: -10px;
+    margin-right: 0.5rem;
+}
+.modules-section{
+    height: 472px;
+    background-color: white;
+    border-radius: 8px;
+}
+.card-head-section{
+    background-color: #E1E8F8;
+}
+.check-special{
+    border: 0px white;
+}
+.separator{
+    border-bottom: 1.5px dashed #F6F8FA;
+}
+.module-footer{
+    border-top: 1.5px dashed #F6F8FA;
+}
+
+.form-check-input:checked{
+    .test1{
+        background-color: red;
+    }
+}
+
+.s-mod{
+    margin-left:5% !important; 
+    width: 100%;
+}
+.ss-mod{
+    margin-left:10% !important; 
+    width: 100%;
+}
+.sss-mod{
+    margin-left:15% !important; 
+    width: 100%;
+}

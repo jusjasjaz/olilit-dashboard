@@ -1,0 +1,121 @@
+<app-breadcrumbs title="{{ 'PARTNER_LIST.text1' | translate }}" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="row mb-2 mt-3">
+    <div class="col-lg-12 fw-bold fs-20">{{ 'PARTNER_LIST.text1' | translate }}</div>
+</div>
+<div class="row" *ngIf="access.permissions['Partner List'] && access.permissions['Partner List'].includes('R')">
+  <div class="col-lg-12">
+      <div class="card">
+          <div class="card-body">
+              <div class="mt-3">
+                  <div class="row g-4 mb-4">
+                      <div class="col-sm-auto">
+                          <div class="d-flex gap-1">
+                            <ng-select placeholder="{{ 'OTHERS.text1' | translate }}" [items]="selectValue" bindLabel="name" [multiple]="true" [(ngModel)]="filter_column" (change)="filter_partner()"></ng-select>
+                          </div>
+                      </div>
+                      <div class="col-sm">
+                          <div class="d-flex justify-content-sm-end">
+                              <div class="search-box ms-2">
+                                  <input type="text" class="form-control search" placeholder="{{ 'OTHERS.text2' | translate }}..." [(ngModel)]="filter_keyword" (keyup)="filter_partner()">
+                                  <i class="ri-search-line search-icon"></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="table-responsive table-card table-striped">
+                      <table class="table table-striped">
+                        <thead>
+                            <tr class="tr-section text-primary">
+                                <th>{{ 'PARTNER_LIST.text2' | translate }}</th>
+                                <th>{{ 'PARTNER_LIST.text3' | translate }}</th>
+                                <th>{{ 'PARTNER_LIST.text4' | translate }}</th>
+                                <th>{{ 'PARTNER_LIST.text5' | translate }}</th>
+                                <th class="text-right">{{ 'PARTNER_LIST.text6' | translate }}</th>
+                                <th class="text-right">{{ 'PARTNER_LIST.text7' | translate }}</th>
+                                <th class="text-right">{{ 'PARTNER_LIST.text8' | translate }}</th>
+                                <th width="10%" *ngIf="access.permissions['Partner List'] && ( access.permissions['Partner List'].includes('E') || access.permissions['Partner Referral List'].includes('R') )"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor="let data of filtered_partnerList" [hidden]="data.key > pager.end || data.key < pager.start">
+                                <td>{{ data.userId }}</td>
+                                <td>{{ data.firstName }}</td>
+                                <td>{{ data.lastName }}</td>
+                                <td>{{ data.email }}</td>
+                                <td class="text-right">{{ data.LimitCount }}</td>
+                                <td class="text-right">{{ data.TotalActiveReferrals }}</td>
+                                <td class="text-right">{{ data.TotalReferrals }}</td>
+                                <td class="text-center" *ngIf="access.permissions['Partner List'] && ( access.permissions['Partner List'].includes('E') || access.permissions['Partner Referral List'].includes('R') )">
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-clear fs-15" *ngIf="access.permissions['Partner List'] && access.permissions['Partner List'].includes('E')" (click)="updatePartner(centerDataModal, data)" title="Update"><i class="ri-edit-2-line pointer"></i></button>
+                                        <button class="btn btn-clear fs-15" *ngIf="access.permissions['Partner Referral List'] && access.permissions['Partner Referral List'].includes('R')" (click)="viewPartner(data)" title="Details"><i class="ri-eye-line pointer"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                      </table>
+                  </div>
+
+                  <div class="row justify-content-md-between align-items-md-center">
+                    <div class="col col-sm-6">
+                        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                            <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{filtered_partnerList.length}}</span> {{ 'OTHERS.text6' | translate }}</div>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <div class="text-sm-right float-sm-end listjs-pagination">
+        
+                        <div class="paginate" *ngIf="filtered_partnerList.length!=0">
+                            
+                            <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                              <div class="paginate-page " (click)="setPage(pager.page-1, $event)"><span>◄</span></div>
+                              <div class="paginate-page {{ page==pager.page ? 'current' : '' }}" (click)="setPage(page, $event)" *ngFor="let page of pager.limited_page" ><span>{{page}}</span></div>
+                              <div class="paginate-page " (click)="setPage(pager.page+1, $event)"><span>►</span></div>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                  </div>
+
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<ng-template #centerDataModal let-modal>
+    <div class="modal-body text-center p-5">
+      <div>
+          <h4 class="mb-3">{{ 'PARTNER_LIST.UPDATE_PARTNER.text1' | translate }}</h4>
+        <div class="mb-5">
+            <div class="mt-3">
+              <label for="placeholderInput" class="form-label">{{ 'PARTNER_LIST.UPDATE_PARTNER.text2' | translate }}</label>
+              <input type="text" class="form-control" [(ngModel)]="partnerDetailsToUpdate.id" [ngModelOptions]="{standalone:true}" [disabled]="true">
+            </div>
+            <div class="mt-3">
+              <label for="placeholderInput" class="form-label">{{ 'PARTNER_LIST.UPDATE_PARTNER.text3' | translate }}</label>
+              <input type="text" class="form-control" [(ngModel)]="partnerDetailsToUpdate.name" [ngModelOptions]="{standalone:true}" [disabled]="true">
+            </div>
+            <div class="mt-3">
+              <label for="placeholderInput" class="form-label">{{ 'PARTNER_LIST.UPDATE_PARTNER.text4' | translate }}</label>
+               <input class="form-control" [(ngModel)]="partnerDetailsToUpdate.email" [ngModelOptions]="{standalone:true}" [disabled]="true">
+            </div>
+            <div class="mt-3">
+              <label for="placeholderInput" class="form-label">{{ 'PARTNER_LIST.UPDATE_PARTNER.text5' | translate }}</label>
+               <input class="form-control" [(ngModel)]="partnerDetailsToUpdate.limit" [ngModelOptions]="{standalone:true}" (keypress)="numbersOnly($event)">
+            </div>
+        </div>
+          <!-- <p class="text-muted mb-4"> The transfer was not successfully received by us. the email of the recipient wasn't correct.</p> -->
+          <div class="hstack gap-2 justify-content-center btn-mdl">
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modal.close('Close click')">{{ 'PARTNER_LIST.UPDATE_PARTNER.text6' | translate }}</button>
+              <a href="javascript:void(0);" (click)="confirmUpdate()" [disabled]="!partnerDetailsToUpdate.limit" class="btn btn-success">{{ 'PARTNER_LIST.UPDATE_PARTNER.text7' | translate }}</a>
+          </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

@@ -1,0 +1,44 @@
+.add-btn-width{
+    width: 150px;
+}
+.tr-section{
+    background: #E1E8F8;
+}
+
+.paginate{
+    padding: 1.5rem 1em !important;
+  }
+
+  .paginate {
+    padding: 1.5rem 0;
+    font-size: 14px;
+    color: lightgray;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+  
+    .paginate-pages {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  
+    .paginate-page {
+      color: lightgray;
+      cursor: pointer;
+  
+      &.current {
+        color: #04508C;
+      }
+  
+      &:not(:last-child) {
+        margin-right: 1.25rem;
+      }
+    }
+    
+  }
+
+.mr-10{
+  margin-right: 10px;
+}

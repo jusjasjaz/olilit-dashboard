@@ -1,0 +1,391 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Tasks List" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-xxl-3 col-sm-6">
+      <div class="card card-animate">
+          <div class="card-body">
+              <div class="d-flex justify-content-between">
+                  <div>
+                      <p class="fw-medium text-muted mb-0">Total Tasks</p>
+                      <h2 class="mt-4 ff-secondary fw-semibold"><span [CountTo]="234" class="counter-value" [from]="0" [duration]="1"></span>k</h2>
+                      <p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">
+                          <i class="ri-arrow-up-line align-middle"></i> 17.32 %
+                      </span> vs. previous month</p>
+                  </div>
+                  <div>
+                      <div class="avatar-sm flex-shrink-0">
+                          <span class="avatar-title bg-soft-info text-info rounded-circle fs-4">
+                              <i class="ri-ticket-2-line"></i>
+                          </span>
+                      </div>
+                  </div>
+              </div>
+          </div><!-- end card body -->
+      </div> <!-- end card-->
+  </div><!--end col-->
+  <div class="col-xxl-3 col-sm-6">
+      <div class="card card-animate">
+          <div class="card-body">
+              <div class="d-flex justify-content-between">
+                  <div>
+                      <p class="fw-medium text-muted mb-0">Pending Tasks</p>
+                      <h2 class="mt-4 ff-secondary fw-semibold"><span [CountTo]="64.5" class="counter-value" [from]="0" [duration]="1"></span>k</h2>
+                      <p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">
+                          <i class="ri-arrow-down-line align-middle"></i> 0.87 %
+                      </span> vs. previous month</p>
+                  </div>
+                  <div>
+                      <div class="avatar-sm flex-shrink-0">
+                          <span class="avatar-title bg-soft-warning text-warning rounded-circle fs-4">
+                             <i class="mdi mdi-timer-sand"></i>
+                          </span>
+                      </div>
+                  </div>
+              </div>
+          </div><!-- end card body -->
+      </div>
+  </div><!--end col-->
+  <div class="col-xxl-3 col-sm-6">
+      <div class="card card-animate">
+          <div class="card-body">
+              <div class="d-flex justify-content-between">
+                  <div>
+                      <p class="fw-medium text-muted mb-0">Completed Tasks</p>
+                      <h2 class="mt-4 ff-secondary fw-semibold"><span [CountTo]="116.21" class="counter-value" [from]="0" [duration]="1"></span>K</h2>
+                      <p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">
+                          <i class="ri-arrow-down-line align-middle"></i> 2.52 %
+                      </span> vs. previous month</p>
+                  </div>
+                  <div>
+                      <div class="avatar-sm flex-shrink-0">
+                          <span class="avatar-title bg-soft-success text-success rounded-circle fs-4">
+                              <i class="ri-checkbox-circle-line"></i>
+                          </span>
+                      </div>
+                  </div>
+              </div>
+          </div><!-- end card body -->
+      </div>
+  </div><!--end col-->
+  <div class="col-xxl-3 col-sm-6">
+      <div class="card card-animate">
+          <div class="card-body">
+              <div class="d-flex justify-content-between">
+                  <div>
+                      <p class="fw-medium text-muted mb-0">Deleted Tasks</p>
+                      <h2 class="mt-4 ff-secondary fw-semibold"><span [CountTo]="14.84" class="counter-value" [from]="0" [duration]="1"></span>%</h2>
+                      <p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">
+                          <i class="ri-arrow-up-line align-middle"></i> 0.63 %
+                      </span> vs. previous month</p>
+                  </div>
+                  <div>
+                      <div class="avatar-sm flex-shrink-0">
+                          <span class="avatar-title bg-soft-danger text-danger rounded-circle fs-4">
+                              <i class="ri-delete-bin-line"></i>
+                          </span>
+                      </div>
+                  </div>
+              </div>
+          </div><!-- end card body -->
+      </div>
+  </div><!--end col-->
+</div><!--end row-->
+
+<div class="row">
+  <div class="col-lg-12">
+      <div class="card"  id="tasksList">
+          <div class="card-header border-0">
+              <div class="d-flex align-items-center">
+                  <h5 class="card-title mb-0 flex-grow-1">All Tasks</h5>
+                  <div class="flex-shrink-0">
+                      <button class="btn btn-danger add-btn" data-bs-toggle="modal" data-bs-target="#showModal" (click)="openModal(content)"><i class="ri-add-line align-bottom me-1"></i> Create Task</button>
+                      <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                  </div>
+              </div>
+          </div>
+          <div class="card-body border border-dashed border-end-0 border-start-0">
+              <form>
+                  <div class="row g-3">
+                      <div class="col-xxl-5 col-sm-12">
+                          <div class="search-box">
+                              <input type="text"  name="searchTerm" class="form-control" placeholder="Search for tasks or something..." [(ngModel)]="service.searchTerm">
+                            <i class="ri-search-line search-icon"></i>
+                          </div>
+                      </div><!--end col-->
+
+                      <div class="col-xxl-3 col-sm-4">
+                          <input class="form-control flatpickr-input" type="text" mwlFlatpickr [altInput]="true" [convertModelValue]="true" placeholder="Select date range">
+                      </div><!--end col-->
+
+                      <div class="col-xxl-3 col-sm-4">
+                          <div class="input-light">
+                              <select class="form-control bg-light border-light" data-choices data-choices-search-false name="choices-single-default"  id="idStatus">
+                                  <option value="">Status</option>
+                                  <option value="all" selected>All</option>
+                                  <option value="New">New</option>
+                                  <option value="Pending">Pending</option>
+                                  <option value="Inprogress">Inprogress</option>
+                                  <option value="Completed">Completed</option>
+                              </select>
+                          </div>
+                      </div><!--end col-->
+                      <div class="col-xxl-1 col-sm-4">
+                          <button type="button" class="btn btn-primary w-100" onclick="SearchData();"> <i class="ri-equalizer-fill me-1 align-bottom"></i>
+                              Filters
+                          </button>
+                      </div><!--end col-->
+                  </div><!--end row-->
+              </form>
+          </div><!--end card-body-->
+          <div class="card-body">
+              <div class="table-responsive table-card mb-2">
+                <table class="table">
+                  <thead>
+                  <tr class="bg-light text-muted">
+                    <th scope="col" style="width: 40px;">
+                      <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="checkAll" value="option" [(ngModel)]="masterSelected" (change)="checkUncheckAll()">
+                      </div>
+                  </th>
+                    <th class="sort" sortable="taskId" (sort)="onSort($event)">ID</th>
+                    <th class="sort" sortable="project" (sort)="onSort($event)">Project</th>
+                    <th class="sort" sortable="task" (sort)="onSort($event)">Task</th>
+                    <th class="sort" sortable="creater" (sort)="onSort($event)">Client Name</th>
+                    <th class="sort" sortable="subItem" (sort)="onSort($event)">Assigned To</th>
+                    <th class="sort" sortable="dueDate" (sort)="onSort($event)">Due Date</th>
+                    <th class="sort" sortable="status" (sort)="onSort($event)">Status</th>
+                    <th class="sort" sortable="priority">Priority</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let data of listViewList$ | async">
+                    <th scope="row">
+                      <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="checkAll" value="option1" [(ngModel)]="data.isSelected">
+                      </div>
+                    </th>
+                    <td><a routerLink="/tasks/details"><ngb-highlight [result]="data.taskId" [term]="service.searchTerm"></ngb-highlight></a></td>
+                    <td><ngb-highlight [result]="data.project" [term]="service.searchTerm"></ngb-highlight></td>
+                    <td><ngb-highlight [result]="data.task" [term]="service.searchTerm"></ngb-highlight></td>
+                    <td><ngb-highlight [result]="data.creater" [term]="service.searchTerm"></ngb-highlight></td>
+                    <td class="assignedto">
+                      <div class="avatar-group">
+                          <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Frank">
+                              <img src="{{data.subItem}}" alt="" class="rounded-circle avatar-xxs" />
+                          </a>
+                      </div>
+                  </td>
+                    <td><ngb-highlight [result]="data.dueDate" [term]="service.searchTerm"></ngb-highlight></td>
+                    <td class="status"><span class="badge badge-soft-{{data.statusClass}} text-uppercase">{{data.status}}</span></td>
+                    <td class="priority"><span class="badge bg-{{data.priorityClass}} text-uppercase">{{data.priority}}</span></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="row justify-content-md-between align-items-md-center">
+                <div class="col col-sm-6">
+                    <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                        Showing
+                        {{service.startIndex}} to
+                        {{service.endIndex}} of {{service.totalRecords}}
+                        entries
+                    </div>
+                </div>
+                <!-- Pagination -->
+                <div class="col col-sm-6">
+                    <div class="text-sm-right float-sm-end listjs-pagination">
+                      <ngb-pagination
+                      [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+                    </ngb-pagination>
+                    </div>
+                </div>
+                <!-- End Pagination -->
+          </div><!--end card-body-->
+      </div><!--end card-->
+  </div><!--end col-->
+</div><!--end row-->
+
+<ng-template #content role="document" let-modal>
+    <div class="modal-header p-3 bg-soft-info">
+        <h5 class="modal-title" id="exampleModalLabel">Create Task</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form (ngSubmit)="saveUser()" [formGroup]="ordersForm">
+        <div class="modal-body">
+            <div class="row g-3">
+                <div class="col-lg-12">
+                    <label for="projectName-field" class="form-label">Project Name</label>
+                    <input type="text" id="projectName-field" class="form-control" placeholder="Project name" required formControlName="name" [ngClass]="{ 'is-invalid': submitted && form['name'].errors }"/>
+                    <div *ngIf="submitted && form['name'].errors" class="invalid-feedback" align="left">
+                      <div *ngIf="form['name'].errors['required']">Project Name is required</div>
+                    </div>
+                </div><!--end col-->
+                <div class="col-lg-12">
+                    <div>
+                        <label for="tasksTitle-field" class="form-label">Title</label>
+                        <input type="text" id="tasksTitle-field" class="form-control" placeholder="Title" required formControlName="title" [ngClass]="{ 'is-invalid': submitted && form['title'].errors }"/>
+                        <div *ngIf="submitted && form['title'].errors" class="invalid-feedback" align="left">
+                          <div *ngIf="form['title'].errors['required']">Title is required</div>
+                        </div>
+                    </div>
+                </div><!--end col-->
+                <div class="col-lg-12">
+                    <label for="clientName-field" class="form-label">Client Name</label>
+                    <input type="text" id="clientName-field" class="form-control" placeholder="Client name" required formControlName="createName" [ngClass]="{ 'is-invalid': submitted && form['createName'].errors }"/>
+                    <div *ngIf="submitted && form['createName'].errors" class="invalid-feedback" align="left">
+                      <div *ngIf="form['createName'].errors['required']">Client Name is required</div>
+                    </div>
+                </div><!--end col-->
+                <div class="col-lg-12">
+                    <label class="form-label">Assigned To</label>
+                    <ngx-simplebar style="height: 95px;">
+                      <ul class="list-unstyled vstack gap-2 mb-0">
+                          <li>
+                              <div class="form-check d-flex align-items-center">
+                                  <input class="form-check-input me-3" type="checkbox" value="" id="anna-adame">
+                                  <label class="form-check-label d-flex align-items-center" for="anna-adame">
+                                      <span class="flex-shrink-0">
+                                          <img src="assets/images/users/avatar-1.jpg" alt="" class="avatar-xxs rounded-circle">
+                                      </span>
+                                      <span class="flex-grow-1 ms-2">
+                                          Anna Adame
+                                      </span>
+                                  </label>
+                              </div>
+                          </li>
+                          <li>
+                              <div class="form-check d-flex align-items-center">
+                                  <input class="form-check-input me-3" type="checkbox" value="" id="frank-hook">
+                                  <label class="form-check-label d-flex align-items-center" for="frank-hook">
+                                      <span class="flex-shrink-0">
+                                          <img src="assets/images/users/avatar-3.jpg" alt="" class="avatar-xxs rounded-circle">
+                                      </span>
+                                      <span class="flex-grow-1 ms-2">
+                                          Frank Hook
+                                      </span>
+                                  </label>
+                              </div>
+                          </li>
+                          <li>
+                              <div class="form-check d-flex align-items-center">
+                                  <input class="form-check-input me-3" type="checkbox" value="" id="alexis-clarke">
+                                  <label class="form-check-label d-flex align-items-center" for="alexis-clarke">
+                                      <span class="flex-shrink-0">
+                                          <img src="assets/images/users/avatar-6.jpg" alt="" class="avatar-xxs rounded-circle">
+                                      </span>
+                                      <span class="flex-grow-1 ms-2">
+                                          Alexis Clarke
+                                      </span>
+                                  </label>
+                              </div>
+                          </li>
+                          <li>
+                              <div class="form-check d-flex align-items-center">
+                                  <input class="form-check-input me-3" type="checkbox" value="" id="herbert-stokes">
+                                  <label class="form-check-label d-flex align-items-center" for="herbert-stokes">
+                                      <span class="flex-shrink-0">
+                                          <img src="assets/images/users/avatar-2.jpg" alt="" class="avatar-xxs rounded-circle">
+                                      </span>
+                                      <span class="flex-grow-1 ms-2">
+                                          Herbert Stokes
+                                      </span>
+                                  </label>
+                              </div>
+                          </li>
+                          <li>
+                              <div class="form-check d-flex align-items-center">
+                                  <input class="form-check-input me-3" type="checkbox" value="" id="michael-morris">
+                                  <label class="form-check-label d-flex align-items-center" for="michael-morris">
+                                      <span class="flex-shrink-0">
+                                          <img src="assets/images/users/avatar-7.jpg" alt="" class="avatar-xxs rounded-circle">
+                                      </span>
+                                      <span class="flex-grow-1 ms-2">
+                                          Michael Morris
+                                      </span>
+                                  </label>
+                              </div>
+                          </li>
+                          <li>
+                              <div class="form-check d-flex align-items-center">
+                                  <input class="form-check-input me-3" type="checkbox" value="" id="nancy-martino">
+                                  <label class="form-check-label d-flex align-items-center" for="nancy-martino">
+                                      <span class="flex-shrink-0">
+                                          <img src="assets/images/users/avatar-5.jpg" alt="" class="avatar-xxs rounded-circle">
+                                      </span>
+                                      <span class="flex-grow-1 ms-2">
+                                          Nancy Martino
+                                      </span>
+                                  </label>
+                              </div>
+                          </li>
+                          <li>
+                              <div class="form-check d-flex align-items-center">
+                                  <input class="form-check-input me-3" type="checkbox" value="" id="thomas-taylor">
+                                  <label class="form-check-label d-flex align-items-center" for="thomas-taylor">
+                                      <span class="flex-shrink-0">
+                                          <img src="assets/images/users/avatar-8.jpg" alt="" class="avatar-xxs rounded-circle">
+                                      </span>
+                                      <span class="flex-grow-1 ms-2">
+                                          Thomas Taylor
+                                      </span>
+                                  </label>
+                              </div>
+                          </li>
+                          <li>
+                              <div class="form-check d-flex align-items-center">
+                                  <input class="form-check-input me-3" type="checkbox" value="" id="tonya-noble">
+                                  <label class="form-check-label d-flex align-items-center" for="tonya-noble">
+                                      <span class="flex-shrink-0">
+                                          <img src="assets/images/users/avatar-10.jpg" alt="" class="avatar-xxs rounded-circle">
+                                      </span>
+                                      <span class="flex-grow-1 ms-2">
+                                          Tonya Noble
+                                      </span>
+                                  </label>
+                              </div>
+                          </li>
+                      </ul>
+                    </ngx-simplebar>
+                </div>
+                <!--end col-->
+                <div class="col-lg-6">
+                    <label for="duedate-field" class="form-label">Due Date</label>
+                    <input class="form-control flatpickr-input" type="text" placeholder="Due date" mwlFlatpickr [altInput]="true" [convertModelValue]="true" [dateFormat]="'Y-m-d'">
+                </div><!--end col-->
+                <div class="col-lg-6">
+                    <label for="ticket-status" class="form-label">Status</label>
+                    <select class="form-control" data-choices data-choices-search-false id="ticket-status" formControlName="status" [ngClass]="{ 'is-invalid': submitted && form['status'].errors }">
+                        <option value="">Status</option>
+                        <option value="New">New</option>
+                        <option value="Inprogress">Inprogress</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                    <div *ngIf="submitted && form['status'].errors" class="invalid-feedback" align="left">
+                      <div *ngIf="form['status'].errors['required']">Status is required</div>
+                    </div>
+                </div><!--end col-->
+                <div class="col-lg-12">
+                    <label for="priority-field" class="form-label">Priority</label>
+                    <select class="form-control" data-choices data-choices-search-false id="priority-field" formControlName="priority" [ngClass]="{ 'is-invalid': submitted && form['priority'].errors }">
+                        <option value="">Priority</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                    <div *ngIf="submitted && form['priority'].errors" class="invalid-feedback" align="left">
+                      <div *ngIf="form['priority'].errors['required']">Priority is required</div>
+                    </div>
+                </div><!--end col-->
+            </div><!--end row-->
+        </div>
+        <div class="modal-footer">
+            <div class="hstack gap-2 justify-content-end">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modal.close('Close click')">Close</button>
+                <button type="submit" class="btn btn-success" id="add-btn">Add Task</button>
+            </div>
+        </div>
+    </form>
+</ng-template>

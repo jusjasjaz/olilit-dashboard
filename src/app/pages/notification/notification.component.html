@@ -1,0 +1,204 @@
+<app-breadcrumbs title="{{ 'NOTIFICATION.text1' | translate }}" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="row mb-2 mt-3">
+    <div class="col-lg-12 fw-bold fs-20">{{ 'NOTIFICATION.text1' | translate }}</div>
+</div>
+<div class="row" *ngIf="access.permissions['Notification Template'] && access.permissions['Notification Template'].includes('R')">
+  <div class="col-lg-12">
+      <div class="card">
+          <textarea #content_field [hidden]="1" [(ngModel)]="active.content" [ngModelOptions]="{standalone:true}"></textarea>
+          <div class="card-body">
+              <div class="mt-3">
+                  <div class="row g-4 mb-3">
+                      <div class="col-sm-auto">
+                          <div class="d-flex gap-1" *ngIf="selectValue.length > 0">
+                            <ng-select placeholder="{{ 'OTHERS.text1' | translate }}" [items]="selectValue" bindLabel="name" [multiple]="true" [(ngModel)]="filter_column" (change)="filter_notif()"></ng-select>
+                          </div>
+                      </div>
+                      <div class="col-sm">
+                          <div class="d-flex justify-content-sm-end">
+                              <div class="search-box ms-2">
+                                  <input type="text" class="form-control search" placeholder="{{ 'OTHERS.text2' | translate }}..." [(ngModel)]="filter_keyword" (keyup)="filter_notif()">
+                                  <i class="ri-search-line search-icon"></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="table-responsive table-card mt-3 mb-1">
+                      <table class="table ">
+                        <thead>
+                            <tr class="tr-section text-primary">
+                                <th>{{ 'NOTIFICATION.text2' | translate }}</th>
+                                <th>{{ 'NOTIFICATION.text3' | translate }}</th>
+                                <th>{{ 'NOTIFICATION.text4' | translate }}</th>
+                                <th *ngIf="access.permissions['Notification Template'] && access.permissions['Notification Template'].includes('E')">{{ 'NOTIFICATION.text5' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr *ngFor="let data of filtered_notif_list" [hidden]="data.key > pager.end || data.key < pager.start">
+                            <td>{{ ( data.TemplateName ? data.TemplateName : '-' ) }}</td>
+                            <td>{{ ( data.TemplateCategoryName ? data.TemplateCategoryName : '-' ) }}</td>
+                            <td>{{ ( data.TemplateDescription ? data.TemplateDescription : '-' ) }}</td>
+                            <td width="5%" class="text-center" *ngIf="access.permissions['Notification Template'] && access.permissions['Notification Template'].includes('E')"><button class="btn bg-transparent btn-sm" (click)="openModal(content, data)" > <img src="./assets/icon-edit.png" width="16"> </button></td>
+                        </tr>
+
+                        </tbody>
+                      </table>
+                  </div>
+
+                  <div class="row justify-content-md-between align-items-md-center">
+                    <div class="col col-sm-6">
+                        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                            <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{filtered_notif_list.length}}</span> {{ 'OTHERS.text6' | translate }}</div>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <div class="text-sm-right float-sm-end listjs-pagination">
+        
+                        <div class="paginate" *ngIf="filtered_notif_list.length!=0">
+                            
+                            <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                              <div class="paginate-page " (click)="setPage(pager.page-1, $event)"><span>◄</span></div>
+                              <div class="paginate-page {{ page==pager.page ? 'current' : '' }}" (click)="setPage(page, $event)" *ngFor="let page of pager.limited_page" ><span>{{page}}</span></div>
+                              <div class="paginate-page " (click)="setPage(pager.page+1, $event)"><span>►</span></div>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                  </div>
+
+
+              </div>
+          </div><!-- end card -->
+      </div>
+      <!-- end col -->
+  </div>
+  <!-- end col -->
+</div>
+<!-- end row -->
+
+<ng-template #content role="document" let-modal>
+    <div class="modal-header bg-light p-3">
+        <h5 class="modal-title">{{ 'NOTIFICATION.text6' | translate }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form>
+        <div class="modal-body">
+            <div class="mb-2">
+                <label class="form-label">{{ 'NOTIFICATION.text2' | translate }}</label>
+                <input rows="3" class="form-control" [(ngModel)]="active.name_display" readonly [ngModelOptions]="{standalone:true}" >
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label">{{ 'NOTIFICATION.text4' | translate }}</label>
+                <textarea rows="3" class="form-control" [(ngModel)]="active.description" [ngModelOptions]="{standalone:true}" ></textarea>
+            </div>
+
+            <div class="mb-2">
+                <div class="row">
+                    <div class="col">
+                        <div>
+                            <ul ngbNav #nav="ngbNav" [activeId]="( active.category_id == '1' ? 1 : ( active.category_id == '2' ? 2 : 3 ) )" class="mt-3 nav nav-tabs nav-light">
+                            
+                                <li [ngbNavItem]="1" (click)="clickTab('1')" [hidden]="active.category_id != 1">
+                                    <a ngbNavLink class="text-dark">
+                                        <span class="d-sm-block">{{ 'NOTIFICATION.text7' | translate }}</span>
+                                    </a>
+                                    <ng-template ngbNavContent>
+                                        <ng-template [ngTemplateOutlet]="email"></ng-template>
+                                    </ng-template>
+                                </li>
+                            
+                                <li [ngbNavItem]="2" (click)="clickTab('2')" [hidden]="active.category_id != 2">
+                                    <a ngbNavLink class="text-dark">
+                                        <span class="d-sm-block tab-active">{{ 'NOTIFICATION.text8' | translate }}</span>
+                                    </a>
+                                    <ng-template ngbNavContent>
+                                        <ng-template [ngTemplateOutlet]="sms"></ng-template>
+                                    </ng-template>
+                                </li>
+
+                                <li [ngbNavItem]="3" (click)="clickTab('3')" [hidden]="active.category_id != 3">
+                                    <a ngbNavLink class="text-dark">
+                                        <span class="d-sm-block">{{ 'NOTIFICATION.text9' | translate }}</span>
+                                    </a>
+                                    <ng-template ngbNavContent>
+                                        <ng-template [ngTemplateOutlet]="push"></ng-template>
+                                    </ng-template>
+                                </li>
+                            </ul>
+                          
+                            <div class="tab-content  text-muted">
+                                <div [ngbNavOutlet]="nav"></div>
+                            </div>
+
+                            <ng-template #sms>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="mb-2">
+                                            <label class="form-label">{{ 'NOTIFICATION.text10' | translate }}</label>
+                                        </div>
+                                        <div class="mb-2">
+                                            <button type="button" class="btn btn-sm btn-primary waves-effect waves-light text-uppercase fs-10 mr-10" *ngFor="let tag of tag_list" (click)="selectTag(tag)">{{ tag.TagCode }}</button>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label">{{ 'NOTIFICATION.text11' | translate }}</label>
+                                            <textarea rows="7" #content_field name="smsBody" class="form-control" [(ngModel)]="active.content" [ngModelOptions]="{standalone:true}" (click)="getCaretPos('textarea', content_field)" (keyup)="getCaretPos('textarea', content_field)" placeholder="Add some text here"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template #email>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="mb-2">
+                                            <label class="form-label">{{ 'NOTIFICATION.text10' | translate }}</label>
+                                        </div>
+                                        <div class="mb-2">
+                                            <button type="button" class="btn btn-sm btn-primary waves-effect waves-light text-uppercase fs-10 mr-10" *ngFor="let tag of tag_list" (click)="selectTag(tag)">{{ tag.TagCode }}</button>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label">{{ 'NOTIFICATION.text12' | translate }}</label>
+                                            <input type="text" class="form-control" [(ngModel)]="active.subject" [ngModelOptions]="{standalone:true}" >
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label">{{ 'NOTIFICATION.text13' | translate }}</label>
+                                            <div id="email_editor" #editor_field name="EmailBody" (click)="getCaretPos('toastui-editor', email_editor)" (keyup)="getCaretPos('toastui-editor', email_editor)" class="toastui-editor"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template #push>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="mb-2">
+                                            <label class="form-label">{{ 'NOTIFICATION.text10' | translate }}</label>
+                                        </div>
+                                        <div class="mb-2">
+                                            <button type="button" class="btn btn-sm btn-primary waves-effect waves-light text-uppercase fs-10 mr-10" *ngFor="let tag of tag_list" (click)="selectTag(tag)">{{ tag.TagCode }}</button>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label">{{ 'NOTIFICATION.text14' | translate }}</label>
+                                            <textarea rows="7" #content_field name="pushBody" class="form-control" [(ngModel)]="active.content" [ngModelOptions]="{standalone:true}" (click)="getCaretPos('textarea', content_field)" (keyup)="getCaretPos('textarea', content_field)" placeholder="Add some text here"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                          
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="hstack gap-2 justify-content-end">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modal.close('Close click')">{{ 'NOTIFICATION.text15' | translate }}</button>
+                <button type="submit" class="btn w-50 btn-primary" (click)="update_notif()">{{ 'NOTIFICATION.text16' | translate }}</button>
+            </div>
+        </div>
+    </form>
+  </ng-template>
+
+  <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

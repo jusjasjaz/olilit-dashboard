@@ -1,0 +1,113 @@
+<app-breadcrumbs title="{{ 'HELP_TICKET.text1' | translate }}" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="row mb-2 mt-3">
+    <div class="col-lg-12 fw-bold fs-20">{{ 'HELP_TICKET.text1' | translate }}</div>
+</div>
+<div class="row" *ngIf="access.permissions['Help Ticket'] && access.permissions['Help Ticket'].includes('R')">
+  <div class="col-lg-12">
+      <div class="card">
+          <div class="card-body">
+              <div class="mt-3">
+                  <div class="row g-4 mb-3">
+                      <div class="col-sm-auto">
+                          <div class="d-flex gap-1" *ngIf="selectValue.length > 0">
+                            <ng-select placeholder="{{ 'OTHERS.text1' | translate }}" [items]="selectValue" bindLabel="name" [multiple]="true" [(ngModel)]="filter_column" (change)="filter_tickets()"></ng-select>
+                          </div>
+                      </div>
+                      <div class="col-sm">
+                          <div class="d-flex justify-content-sm-end">
+                              <div class="search-box ms-2">
+                                  <input type="text" class="form-control search" placeholder="{{ 'OTHERS.text2' | translate }}..." [(ngModel)]="filter_keyword" (keyup)="filter_tickets()">
+                                  <i class="ri-search-line search-icon"></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="table-responsive table-card mt-3 mb-1">
+                      <table class="table ">
+                        <thead>
+                            <tr class="tr-section text-primary">
+                                <th>{{ 'HELP_TICKET.text2' | translate }}</th>
+                                <th>{{ 'HELP_TICKET.text3' | translate }}</th>
+                                <th>{{ 'HELP_TICKET.text4' | translate }}</th>
+                                <th>{{ 'HELP_TICKET.text5' | translate }}</th>
+                                <th>{{ 'HELP_TICKET.text6' | translate }}</th>
+                                <th>{{ 'HELP_TICKET.text7' | translate }}</th>
+                                <th>{{ 'HELP_TICKET.text8' | translate }}</th>
+                                <th *ngIf="access.permissions['Help Ticket'] && access.permissions['Help Ticket'].includes('E')">{{ 'HELP_TICKET.text9' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr *ngFor="let data of filtered_ticketList" [hidden]="data.key > pager.end || data.key < pager.start">
+                            <td width="">{{ ( data.HelpTicketCreateDate ? data.HelpTicketCreateDate : '-' ) }}</td>
+                            <td width="">{{ ( data.CustomerName ? data.CustomerName : '-' ) }}</td>
+                            <td width="">{{ ( data.CustomerEmail ? data.CustomerEmail : '-' ) }}</td>
+                            <td width="">{{ ( data.CustomerMobile ? data.CustomerMobile : '-' ) }}</td>
+                            <td width="">{{ ( data.HelpTypeName ? data.HelpTypeName : '-' ) }}</td>
+                            <td width="">{{ ( data.HelpTicketIssue ? data.HelpTicketIssue : '-' ) }}</td>
+                            <td width="">{{ ( data.HelpTicketStatus ? data.HelpTicketStatus : '-' ) }}</td>
+
+                            <td width="5%" class="text-center" *ngIf="access.permissions['Help Ticket'] && access.permissions['Help Ticket'].includes('E')"><button class="btn bg-transparent btn-sm" (click)="openModal(content, data)"> <img src="./assets/icon-view.svg" width="16"> </button></td>
+                        </tr>
+
+                        </tbody>
+                      </table>
+                  </div>
+
+                  <div class="row justify-content-md-between align-items-md-center">
+                    <div class="col col-sm-6">
+                        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                            <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{filtered_ticketList.length}}</span> {{ 'OTHERS.text6' | translate }}</div>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <div class="text-sm-right float-sm-end listjs-pagination">
+        
+                        <div class="paginate" *ngIf="filtered_ticketList.length!=0">
+                            
+                            <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                              <div class="paginate-page " (click)="setPage(pager.page-1, $event)"><span>◄</span></div>
+                              <div class="paginate-page {{ page==pager.page ? 'current' : '' }}" (click)="setPage(page, $event)" *ngFor="let page of pager.limited_page" ><span>{{page}}</span></div>
+                              <div class="paginate-page " (click)="setPage(pager.page+1, $event)"><span>►</span></div>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                  </div>
+
+
+              </div>
+          </div><!-- end card -->
+      </div>
+      <!-- end col -->
+  </div>
+  <!-- end col -->
+</div>
+<!-- end row -->
+
+<ng-template #content role="document" let-modal>
+    <div class="modal-header bg-light p-3">
+        <h5 class="modal-title">{{ 'HELP_TICKET.text10' | translate }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form>
+        <div class="modal-body">
+            <div class="mb-2">
+                <!-- <label class="form-label">Help Ticket Message</label> -->
+                <textarea type="text" class="form-control" readonly [(ngModel)]="active.description" [ngModelOptions]="{standalone:true}"></textarea>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <div class="hstack gap-2 justify-content-end">
+                <!-- <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modal.close('Close click')">Close</button> -->
+                <button type="submit" class="btn  btn-primary" (click)="reopen_ticket()" *ngIf="active.status == 'closed'">{{ 'HELP_TICKET.text11' | translate }}</button>
+                <button type="submit" class="btn  btn-primary" (click)="close_ticket()" *ngIf="active.status == 'open'">{{ 'HELP_TICKET.text12' | translate }}</button>
+            </div>
+        </div>
+    </form>
+  </ng-template>
+
+  <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

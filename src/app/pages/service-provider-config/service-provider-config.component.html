@@ -1,0 +1,67 @@
+<app-breadcrumbs title="{{ 'VENDOR_SETTINGS.text1' | translate }}" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="row mb-2 mt-3">
+    <div class="col-lg-12 fw-bold fs-20">{{ 'VENDOR_SETTINGS.text1' | translate }}</div>
+</div>
+<div class="row" *ngIf="access.permissions['Vendor Settings'] && access.permissions['Vendor Settings'].includes('R')">
+    <div class="col-lg-12">
+        <div class="card">
+            <textarea #content_field [hidden]="1" [(ngModel)]="active.content" [ngModelOptions]="{standalone:true}"></textarea>
+            <div class="card-body padding">
+                <div class="row">
+                    <div class="col-sm-1">&nbsp;</div>
+                    <div class="col-sm-10">
+                        <div class="mt-3 mb-1">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label>{{ 'VENDOR_SETTINGS.text2' | translate }}</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>{{ 'VENDOR_SETTINGS.text3' | translate }}</label>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <ng-select *ngIf="merchantList.length > 0" placeholder="Select Merchant" [disabled]="!active.edit" [items]="merchantList" bindLabel="name" [(ngModel)]="active.p1" ></ng-select>
+                                    <ng-select *ngIf="merchantList.length == 0" placeholder="Select Merchant" [disabled]="1"></ng-select>                        </div>
+                                <div class="col-sm-6 mb-3">
+                                    <ng-select *ngIf="merchantList.length > 0" placeholder="Select Merchant" [disabled]="!active.edit" [items]="merchantList" bindLabel="name" [(ngModel)]="active.p2" ></ng-select>
+                                    <ng-select *ngIf="merchantList.length == 0" placeholder="Select Merchant" [disabled]="1"></ng-select>                        </div>
+        
+                                <div class="col-sm-6">
+                                    <label>{{ 'VENDOR_SETTINGS.text4' | translate }}</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>{{ 'VENDOR_SETTINGS.text5' | translate }}</label>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <ng-select *ngIf="merchantList.length > 0" placeholder="Select Merchant" [disabled]="!active.edit" [items]="merchantList" bindLabel="name" [(ngModel)]="active.p3" ></ng-select>
+                                    <ng-select *ngIf="merchantList.length == 0" placeholder="Select Merchant" [disabled]="1"></ng-select>                        </div>
+                                <div class="col-sm-6 mb-3">
+                                    <ng-select *ngIf="merchantList.length > 0" placeholder="Select Merchant" [disabled]="!active.edit" [items]="merchantList" bindLabel="name" [(ngModel)]="active.p4" ></ng-select>
+                                    <ng-select *ngIf="merchantList.length == 0" placeholder="Select Merchant" [disabled]="1"></ng-select>
+                                </div>
+                                
+                                <div class="col-sm-{{ !active.edit ? '10' : '8' }}">&nbsp;</div>
+                                <div class="col-sm-2" *ngIf="!active.edit && access.permissions['Vendor Settings'] && access.permissions['Vendor Settings'].includes('E')">
+                                    <button  type="submit" class="btn w-100 btn-primary" (click)="toggle_edit(true)">{{ 'VENDOR_SETTINGS.text6' | translate }}</button>
+                                </div>
+                                
+                                <div class="col-sm-2" *ngIf="active.edit">
+                                    <button type="submit" class="btn w-100 btn-light" (click)="toggle_edit(false, 'cancel')">{{ 'VENDOR_SETTINGS.text7' | translate }}</button>
+                                </div>
+                                <div class="col-sm-2" *ngIf="active.edit">
+                                    
+                                    <button type="submit" class="btn w-100 btn-primary" (click)="toggle_edit(false, 'save')">{{ 'VENDOR_SETTINGS.text8' | translate }}</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">&nbsp;</div>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div> <!-- end col -->
+</div> <!-- end row -->
+
+
+
+  <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

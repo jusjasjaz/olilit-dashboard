@@ -1,0 +1,28 @@
+@import "../../../assets/scss/config/default/new-variables.scss";
+.tab-active{
+    color: $primary;
+}
+.btn-add{
+    width: 150px;
+    margin-left: 1rem;
+    border-radius: 8px;
+}
+.btn-action{
+    height: 24px;
+    width: 24px;
+    background: #E1E8F8;
+    border-radius: 8px;
+}
+.dropdown-toggle::after {
+    display: inline-block;
+    margin-left: 0.255em;
+    font-size: 15px;
+    line-height: 15px;
+    content: "";
+    font-family: "Material Design Icons";
+}
+.action-icon{
+    position: absolute;
+    left: 7px;
+    top: 4px;
+}

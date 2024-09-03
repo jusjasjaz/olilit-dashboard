@@ -1,0 +1,155 @@
+<!-- ========== App Menu ========== -->
+<div class="app-menu navbar-menu">
+  <!-- LOGO -->
+  <div class="navbar-brand-box">
+      <!-- Dark Logo-->
+      <a routerLink="/dashboard" class="logo logo-dark">
+          <span class="logo-sm">
+              <img src="assets/images/logo-sm.png" alt="" height="22">
+          </span>
+          <span class="logo-lg">
+              <img src="assets/images/logo-light.svg" alt="" height="17">
+          </span>
+      </a>
+      <!-- Light Logo-->
+      <a routerLink="/dashboard" class="logo logo-light">
+          <span class="logo-sm">
+              <img src="assets/images/logo/logo-icon-only.svg" alt="" height="35">
+          </span>
+          <span class="logo-lg">
+              <img src="assets/images/logo/logo-light.svg" alt="" height="80">
+          </span>
+      </a>
+      <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover" (click)="toggleMobileMenu($event)">
+          <i class="ri-record-circle-line"></i>
+      </button>
+  </div>
+
+  <div id="scrollbar">
+      <div class="container-fluid">
+          <div id="two-column-menu">
+          </div>
+          <ngx-simplebar class="sidebar-menu-scroll" style="max-height: calc(100vh - 70px)">
+          <ul class="metismenu list-unstyled navbar-nav" id="navbar-nav">
+            <ng-container *ngIf="access.permissions['Dashboard'] && access.permissions['Dashboard'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="'/dashboard'" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-home-4-line icon nav-icon"></i>
+                  <span class=""> {{ 'SIDEBAR.text1' | translate }}</span>
+                </a>
+              </li>
+            </ng-container>
+            <ng-container *ngIf="access.permissions['Dashboard'] && access.permissions['Dashboard'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-group-line icon nav-icon"></i>
+                  <span class=""> KYC</span>
+                </a>
+              </li>
+            </ng-container>
+            <ng-container *ngIf="access.permissions['Customers'] && access.permissions['Customers'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="'/customers-page'" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-group-line icon nav-icon"></i>
+                  <span class=""> {{ 'SIDEBAR.text2' | translate }}</span>
+                </a>
+              </li>
+            </ng-container>
+            <ng-container *ngIf="access.permissions['Merchants'] && access.permissions['Merchants'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="'/merchants-page'" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-shopping-bag-3-line icon nav-icon"></i>
+                  <span class=""> {{ 'SIDEBAR.text3' | translate }}</span>
+                </a>
+              </li>
+            </ng-container>
+            <ng-container *ngIf="access.permissions['Reports'] && access.permissions['Reports'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="'/reports'" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-line-chart-line icon nav-icon"></i>
+                  <span class=""> Reports</span>
+                </a>
+              </li>
+            </ng-container>
+            <ng-container *ngIf="access.permissions['Partner Referrals'] && access.permissions['Partner Referrals'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="'/partner-list'" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-qr-code-line icon nav-icon"></i>
+                  <span class=""> {{ 'SIDEBAR.text10' | translate }}</span>
+                </a>
+              </li>
+            </ng-container>
+            <ng-container *ngIf="access.permissions['User Management'] && access.permissions['User Management'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="'/user-management'" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-user-line icon nav-icon"></i>
+                  <span class=""> {{ 'SIDEBAR.text4' | translate }}</span>
+                </a>
+              </li>
+            </ng-container>
+            <ng-container *ngIf="access.permissions['Limit Configuration'] && access.permissions['Limit Configuration'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="'/fee-configuration'" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-file-settings-line icon nav-icon"></i>
+                  <span class=""> {{ 'SIDEBAR.text5' | translate }}</span>
+                </a>
+              </li>
+            </ng-container>
+            <ng-container *ngIf="access.permissions['Fee Configuration'] && access.permissions['Fee Configuration'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="'/limit-configuration'" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-settings-5-line icon nav-icon"></i>
+                  <span class=""> {{ 'SIDEBAR.text6' | translate }}</span>
+                </a>
+              </li>
+            </ng-container>
+            <ng-container *ngIf="access.permissions['Referral Condition'] && access.permissions['Referral Condition'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="'/successful-referral-configuration'" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-tools-fill icon nav-icon"></i>
+                  <span class=""> {{ 'SIDEBAR.text11' | translate }}</span>
+                </a>
+              </li>
+            </ng-container>
+            <ng-container *ngIf="access.permissions['Referral Condition'] && access.permissions['Referral Condition'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-translate icon nav-icon"></i>
+                  <span class=""> Translation</span>
+                </a>
+              </li>
+            </ng-container>
+            <ng-container *ngIf="access.permissions['Help Ticket'] && access.permissions['Help Ticket'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="'/help-tickets'" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-question-line icon nav-icon"></i>
+                  <span class=""> {{ 'SIDEBAR.text7' | translate }}</span>
+                </a>
+              </li>
+            </ng-container>
+            <ng-container *ngIf="access.permissions['Notification Template'] && access.permissions['Notification Template'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="'/notification-template'" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-mail-settings-line icon nav-icon"></i>
+                  <span class=""> {{ 'SIDEBAR.text8' | translate }}</span>
+                </a>
+              </li>
+            </ng-container>
+            <ng-container *ngIf="access.permissions['Vendor Settings'] && access.permissions['Vendor Settings'].includes('R')">
+              <li class="nav-item mt-2">
+                <a [routerLink]="'/service-provider-config'" class="side-nav-link-ref nav-link menu-link" routerLinkActive="active">
+                  <i class="bx ri-store-3-line icon nav-icon"></i>
+                  <span class=""> {{ 'SIDEBAR.text9' | translate }}</span>
+                </a>
+              </li>
+            </ng-container>
+          </ul>
+          </ngx-simplebar>
+      </div>
+      <!-- Sidebar -->
+  </div>
+  <div class="sidebar-background"></div>
+</div>
+<!-- Left Sidebar End -->
+<!-- Vertical Overlay-->
+<div class="vertical-overlay" (click)="SidebarHide()"></div>

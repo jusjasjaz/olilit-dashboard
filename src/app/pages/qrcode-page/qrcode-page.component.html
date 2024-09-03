@@ -1,0 +1,741 @@
+<div class="row">
+  <div class="col-lg-10 mb-1" *ngIf="!popDetails" >
+    <ul class="nav nav-pills nav-success mb-3" id="navbar-example">
+      <li class="nav-item" (click)="onSectionChange('Reports')" *ngIf="access.permissions['Reports'] && access.permissions['Reports'].includes('R')">
+        <a class="nav-link" [ngClass]="{'active':currentSection === 'Reports'}"
+          href="javascript:void(0);">{{ 'QRCODE.text1' | translate }}</a>
+      </li>
+      <li class="nav-item" (click)="onSectionChange('Referral List Entry')"  *ngIf="access.permissions['Referral List Entry'] && access.permissions['Referral List Entry'].includes('R')">
+        <a class="nav-link" [ngClass]="{'active':currentSection === 'Referral List Entry'}" href="javascript:void(0);">{{ 'QRCODE.text2' | translate }}</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col-lg-2 text-right" *ngIf="!popDetails">
+    <button class="btn btn-clear btn-sm back-button mb-2" (click)="backToReferralList()">
+    <i class="ri-arrow-left-line fs-15 text-primary"></i> 
+      <label class="go-back-label text-primary">{{ 'QRCODE.text3' | translate }}</label>
+    </button>
+  </div>
+
+  <div *ngIf="currentSection == 'Referral List Entry'">
+    <div class="card">
+      <div class="card-header fw-semibold">
+        {{ 'QRCODE.text4' | translate }}
+      </div>
+      <div class="card-body">
+          <div>
+            <div class="row g-4 mb-4">
+              <div class="col-sm-3">
+                  <div class="d-flex gap-1" *ngIf="usersByRefCodeSelectValue.length > 0">
+                    <ng-select placeholder="{{ 'OTHERS.text1' | translate }}" [items]="usersByRefCodeSelectValue" bindLabel="name" [(ngModel)]="usersByRefCodeFilterColumn" class="w-100"></ng-select>
+                  </div>
+              </div>
+              <div class="col-sm">
+                  <div class="search-box">
+                      <input type="text" class="form-control search w-100" placeholder="{{ 'OTHERS.text2' | translate }}..." [(ngModel)]="usersByRefCodeFilterKeyword" >
+                      <i class="ri-search-line search-icon"></i>
+                  </div>
+              </div>
+              <div class="col-sm-2">
+                  <button type="submit" class="btn btn-primary f-right w-100" (click)="loadUsersWhoScanByRefCode(1)" [disabled]="!usersByRefCodeFilterKeyword">{{ 'OTHERS.text2' | translate }}</button>
+              </div>
+              <div class="col-sm-2">
+                  <button type="submit" class="btn btn-danger f-right w-100" (click)="reset('entryByPartnerID')">{{ 'OTHERS.text8' | translate }}</button>
+              </div>
+            </div>
+            <div class="table-responsive mt-3 mb-1">
+              <table class="table">
+                <thead>
+                  <tr class="tr-section">
+                    <th>{{ 'QRCODE.text5' | translate }}</th>
+                    <th>{{ 'QRCODE.text6' | translate }}</th>
+                    <th>{{ 'QRCODE.text7' | translate }}</th>
+                    <th>{{ 'QRCODE.text8' | translate }}</th>
+                    <th>{{ 'QRCODE.text9' | translate }}</th>
+                    <th>{{ 'QRCODE.text10' | translate }}</th>
+                    <th>{{ 'QRCODE.text11' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of usersByRefCodeFiltered" [hidden]="data.key > pager.end || data.key < pager.start">
+                    <td>{{ data.QRName }}</td>
+                    <td>{{ data.isMarketing == "" || data.isMarketing == "0" ? data.MarketingID : data.Name }}</td>
+                    <td>{{ data.SourceofReferral }}</td>
+                    <td>{{ data.ScannedDateTime }}</td>
+                    <td>{{ data.isMarketing == "" || data.isMarketing == "0" ? "--" : data.Location }}</td>
+                    <td>{{ data.DeviceType }}</td>
+                    <td class="status">
+                      <span class="{{ data.Status == 'Success' ? 'text-active' : 'text-danger' }}">{{ data.Status }}</span>
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="(usersByRefCodeFiltered.length < 1) && !loader.referralList">
+                    <td colspan="8" class="text-center text-gray fs-20">{{ 'QRCODE.text12' | translate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="row justify-content-md-between align-items-md-center">
+              <div class="col col-sm-6">
+                  <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{usersByRefCodeFiltered.length}}</span> {{ 'OTHERS.text6' | translate }}</div>
+                  </div>
+              </div>
+              <div class="col col-sm-6">
+                  <div class="text-sm-right float-sm-end listjs-pagination">
+                    <div class="paginate" *ngIf="usersByRefCodeFiltered.length!=0">
+                        <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                        <div class="paginate-page " (click)="setPage(pager.page-1, $event, usersByRefCodeFiltered, 'entryByPartnerID')"><span>◄</span></div>
+                        <div class="paginate-page {{ page==pager.page ? 'current' : '' }}" (click)="setPage(page, $event, usersByRefCodeFiltered, 'entryByPartnerID')" *ngFor="let page of pager.limited_page" ><span>{{page}}</span></div>
+                        <div class="paginate-page " (click)="setPage(pager.page+1, $event, usersByRefCodeFiltered, 'entryByPartnerID')"><span>►</span></div>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentSection == 'Reports'">
+    <div *ngIf="!popDetails">
+      <div class="col-lg-12 mb-2">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-2 mt-1">
+                <h2>{{ selectedReferral.name }}</h2>
+                <P>{{ selectedReferral.code }}</P>
+              </div>
+              <div class="col-2 right-vline">
+                <div class="row">
+                  <div class="d-flex" style="justify-content: flex-end">
+                      <canvas #pieCanvasQRCode1 id="pieCanvasQRCode1" height="160" class="pieChart"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="row" >
+                  <div class="details-container">
+                    <div class="mb-1">
+                      <div class="label">{{ 'QRCODE.text68' | translate }}:</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" >
+                  <div class="details-container">
+                    <div class="mb-1">
+                      <div>{{ referralData.entries_scans }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" >
+                  <div class="details-container">
+                    <div class="mb-1">
+                      <div class="label">{{ 'QRCODE.text63' | translate }}:</div>
+                    </div>  
+                  </div>
+                </div>
+                <div class="row" >
+                  <div class="details-container">
+                    <div class="mb-1">
+                      <div>{{ referralData.successfulReferrals }}</div>
+                    </div>  
+                  </div>
+                </div>
+              </div>
+              <div class="col-2 right-vline">
+                <div class="row">
+                  <div class="d-flex" style="justify-content: flex-end">
+                      <canvas #pieCanvasQRCode2 id="pieCanvasQRCode2" height="160" class="pieChart"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="row" >
+                  <div class="details-container">
+                    <div class="mb-1">
+                      <div class="label">{{ 'QRCODE.text64' | translate }}:</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" >
+                  <div class="details-container">
+                    <div class="mb-1">
+                      <div>{{ referralData.android }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" >
+                  <div class="details-container">
+                    <div class="mb-1">
+                      <div class="label">{{ 'QRCODE.text65' | translate }}:</div>
+                    </div> 
+                  </div>
+                </div>
+                <div class="row" >
+                  <div class="details-container">
+                    <div class="mb-1">
+                      <div>{{ referralData.ios }}</div>
+                    </div> 
+                  </div>
+                </div>
+                <div class="row" >
+                  <div class="details-container">
+                    <div class="mb-1">
+                      <div class="label">{{ 'QRCODE.text34' | translate }}:</div>
+                    </div>  
+                  </div>
+                </div>
+                <div class="row" >
+                  <div class="details-container">
+                    <div class="mb-1">
+                      <div>{{ referralData.manualEntry }}</div>
+                    </div>  
+                  </div>
+                </div>
+              </div>
+              <div class="col-2 mt-1 text-right">
+                <button type="button" class="btn btn-primary btn-add btn-md px-4 mx-1 f-right font-size-12"
+                  *ngIf="access.permissions['QR Code Report'] && access.permissions['QR Code Report'].includes('A')"
+                  (click)="createQRCode(centerDataModal)">{{ 'QRCODE.text13' | translate }} <i class="bx bx-qr"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+              <div class="row">
+                <div class="col-4 right-vline">
+                  {{ 'QRCODE.text44' | translate }}: &nbsp; {{ selectedReferral.usage }}
+                </div>
+                <div class="col-4 right-vline">
+                  {{ 'QRCODE.text66' | translate }}: &nbsp; {{ selectedReferral.usageRemaining }}
+                </div>
+                <div class="col-4">
+                  {{ 'QRCODE.text42' | translate }}: &nbsp; {{ (selectedReferral.expiry | date: 'YYYY') == '5001' ? "No Expiry" : (selectedReferral.expiry | date: 'YYYY-MM-d') }}
+                </div>
+              </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-lg-12 p-2 mb-2">
+        <ul ngbNav #nav="ngbNav" class="mt-3 nav-pills" [activeId]="activeId ? activeId : 1">
+          <li [ngbNavItem]="1" (click)="onLowerSectionChange('Overview')" *ngIf="access.permissions['Overview'] && access.permissions['Overview'].includes('R')">
+            <a ngbNavLink class="nav-link" [ngClass]="{'active':currentLowerSection === 'Overview'}"
+              href="javascript:void(0);">{{ 'QRCODE.text14' | translate }}</a>
+            <ng-template ngbNavContent>
+              <ng-template [ngTemplateOutlet]="overview"></ng-template>
+            </ng-template>
+          </li>
+  
+          <li [ngbNavItem]="3" (click)="onLowerSectionChange('QR Code Report');activeId = 3;" *ngIf="access.permissions['QR Code Report'] && access.permissions['QR Code Report'].includes('R')">
+            <a  class="nav-link" href="javascript:void(0);" ngbNavLink [ngClass]="{'active':currentLowerSection === 'QR Code Report'}">{{ 'QRCODE.text15' | translate }}</a> <!-- 11 -->
+            <ng-template ngbNavContent>
+              <ng-template [ngTemplateOutlet]="codereport"></ng-template>
+            </ng-template>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="tab-content">
+        <div [ngbNavOutlet]="nav"></div>
+      </div>
+    </div>
+
+    <!-- view details -->
+    <div *ngIf="popDetails">
+     <div class="col-lg-12 mb-2">
+      <div class="d-flex">
+        <button class="btn btn-ghost-primary btn-sm back-button mb-2" (click)="backToReports()">
+          <img class="action-icon" src="./assets/icon-back-primary.svg"> {{ 'QRCODE.text16' | translate }}
+        </button>
+      </div>
+       <div class="card">
+         <div class="card-body">
+           <div class="row">
+
+            <div class="col-3">
+              <div class="d-flex w-100">
+              <div *ngIf="!qrcodeData.link && qrcodeData.source != '1'" class="spinner-border text-success text-center details-qr-head" role="status" ></div>
+              <img *ngIf="qrcodeData.link && qrcodeData.source != '1'" [src]="qrcodeData.link" class="details-qr-head">
+                <div class="details-container">
+                  <div class="text-header">{{ qrcodeData.name }}</div>
+                  <div class="mb-1">
+                    <div class="label">{{ 'QRCODE.text17' | translate }}</div>
+                    <div>{{ qrcodeData.dateGenerated }}</div>
+                  </div>
+                  <div class="mb-1">
+                    <div class="label">{{ 'QRCODE.text67' | translate }}</div>
+                    <div>{{ qrPieData.entries_scans }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-2 right-vline">
+              <div class="row">
+                <div class="d-flex" style="justify-content: flex-end">
+                    <canvas #pieCanvasQRCode3 id="pieCanvasQRCode3" height="160" class="pieChart"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="row" >
+                <div class="details-container">
+                  <div class="mb-1">
+                    <div class="label">{{ 'QRCODE.text64' | translate }}:</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" >
+                <div class="details-container">
+                  <div class="mb-1">
+                    <div>{{ qrPieData.android }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" >
+                <div class="details-container">
+                  <div class="mb-1">
+                    <div class="label">{{ 'QRCODE.text65' | translate }}:</div>
+                  </div> 
+                </div>
+              </div>
+              <div class="row" >
+                <div class="details-container">
+                  <div class="mb-1">
+                    <div>{{ qrPieData.ios }}</div>
+                  </div> 
+                </div>
+              </div>
+            </div>
+
+            <div class="col-5 text-end">
+            <div class="text-header {{ statusInfo(qrcodeData.status, 'color') }} w-100">{{ qrcodeData.status }}</div>
+            </div>
+
+           </div>
+         </div>
+       </div>
+     </div>
+     <div class="card">
+       <div class="card-header fw-semibold">
+        {{ 'QRCODE.text19' | translate }}
+       </div>
+       <div class="card-body">
+          <div>
+            <!-- TABLE HEAD / SEARCH -->
+            <div class="row g-4 mb-4">
+              <div class="col-sm-3">
+                  <div class="d-flex gap-1" *ngIf="usersByQRCodeSelectValue.length > 0">
+                    <ng-select placeholder="{{ 'OTHERS.text1' | translate }}" [items]="usersByQRCodeSelectValue" bindLabel="name" [(ngModel)]="usersByQRCodeFilterColumn" class="w-100"></ng-select>
+                  </div>
+              </div>
+              <div class="col-sm">
+                  <div class="search-box">
+                      <input type="text" class="form-control search w-100" placeholder="{{ 'OTHERS.text2' | translate }}..." [(ngModel)]="usersByQRCodeFilterKeyword" >
+                      <i class="ri-search-line search-icon"></i>
+                  </div>
+              </div>
+              <div class="col-sm-2">
+                  <button type="submit" class="btn btn-primary f-right w-100" (click)="loadUsersWhoScanByQRCode(1)" [disabled]="!usersByQRCodeFilterKeyword">{{ 'OTHERS.text2' | translate }}</button>
+              </div>
+              <div class="col-sm-2">
+                  <button type="submit" class="btn btn-danger f-right w-100" (click)="reset('entryByRefCode')">{{ 'OTHERS.text8' | translate }}</button>
+              </div>
+            </div>
+            <!-- TABLE -->
+             <div class="table-responsive mt-3 mb-1">
+               <table class="table">
+                 <thead>
+                   <tr class="tr-section">
+                     <th>{{ 'QRCODE.text6' | translate }}</th>
+                     <th>{{ 'QRCODE.text7' | translate }}</th>
+                     <th>{{ 'QRCODE.text8' | translate }}</th>
+                     <th>{{ 'QRCODE.text9' | translate }}</th>
+                     <th>{{ 'QRCODE.text10' | translate }}</th>
+                     <th>{{ 'QRCODE.text11' | translate }}</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                  <tr *ngFor="let data of usersByQRCodeFiltered" [hidden]="data.key > pager.end || data.key < pager.start">
+                    <td>{{ data.isMarketing == "" || data.isMarketing == "0" ? data.MarketingID : data.Name }}</td>
+                    <td>{{ data.SourceofReferral }}</td>
+                    <td>{{ data.ScannedDateTime }}</td>
+                    <td>{{ data.isMarketing == "" || data.isMarketing == "0" ? "--" : data.Location }}</td>
+                    <td>{{ data.DeviceType }}</td>
+                    <td class="status">
+                      <span class="{{ data.Status == 'Success' ? 'text-active' : 'text-danger' }}">{{ data.Status }}</span>
+                    </td>
+                  </tr>
+                  <tr *ngIf="(usersByQRCodeFiltered.length < 1) && !loader.referralListByCode">
+                    <td colspan="8" class="text-center text-gray fs-20">{{ 'QRCODE.text12' | translate }}</td>
+                  </tr>
+                 </tbody>
+               </table>
+             </div>
+             <!-- TABLE FOOTER -->
+             <div class="row justify-content-md-between align-items-md-center">
+              <div class="col col-sm-6">
+                  <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{usersByQRCodeFiltered.length}}</span> {{ 'OTHERS.text6' | translate }}</div>
+                  </div>
+              </div>
+              <div class="col col-sm-6">
+                  <div class="text-sm-right float-sm-end listjs-pagination">
+                    <div class="paginate" *ngIf="usersByQRCodeFiltered.length!=0">
+                        <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                        <div class="paginate-page " (click)="setPage(pager.page-1, $event, usersByQRCodeFiltered, 'entryByRefCode')"><span>◄</span></div>
+                        <div class="paginate-page {{ page==pager.page ? 'current' : '' }}" (click)="setPage(page, $event, usersByQRCodeFiltered, 'entryByRefCode')" *ngFor="let page of pager.limited_page" ><span>{{page}}</span></div>
+                        <div class="paginate-page " (click)="setPage(pager.page+1, $event, usersByQRCodeFiltered, 'entryByRefCode')"><span>►</span></div>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #overview>
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="w-100 text-center pad-20" *ngIf="loader.barGraph">
+            <div class="spinner-border text-success text-center" role="status"></div>
+          </div>
+          <div class="w-100" *ngIf="barGraphColum && !loader.barGraph">
+            <apx-chart [series]="barGraphColum.series" [chart]="barGraphColum.chart"
+            [dataLabels]="barGraphColum.dataLabels" [plotOptions]="barGraphColum.plotOptions"
+            [yaxis]="barGraphColum.yaxis" [xaxis]="barGraphColum.xaxis"
+            [legend]="barGraphColum.legend" [colors]="barGraphColum.colors"
+            [stroke]="barGraphColum.stroke"
+            [noData]="barGraphColum.noData"
+            [grid]="barGraphColum.grid"></apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-6 py-4">
+            <div class="table-responsive table-card table-striped">
+              <p class="fw-semibold mb-3 mt-2">{{ 'QRCODE.text20' | translate }}</p>
+              <table class="table table-striped">
+                <thead>
+                  <tr class="tr-section text-primary">
+                    <th width="30%" class="" data-sort="customer_name">{{ 'QRCODE.text21' | translate }}</th>
+                    <th width="30%" class="" data-sort="email">{{ 'QRCODE.text22' | translate }}</th>
+                    <th width="30%" class="" data-sort="date">%</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="loader.scansByDevice">
+                    <td colspan="3" class="text-center pad-20">
+                      <div class="spinner-border text-success text-center" role="status"></div>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let ds of filtered_deviceScans">
+                    <td width="15%">{{ ds.DeviceOS }}</td>
+                    <td width="15%">{{ ds.DeviceCount }}</td>
+                    <td width="25%">{{ ds.Percentage | number: '1.0-0' }}</td>
+                  </tr>
+                  <tr *ngIf="filtered_deviceScans.length < 1 && !loader.scansByDevice">
+                    <td colspan="3" class="text-center text-gray fs-20">{{ 'QRCODE.text23' | translate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="row justify-content-md-between align-items-md-center">
+              <div class="col col-sm-6">
+                  <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                      <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{devicePager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{devicePager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{filtered_locationScans.length}}</span> {{ 'OTHERS.text6' | translate }}</div>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 p-4">
+            <div class="table-responsive table-card table-striped">
+              <p class="fw-semibold mb-3 mt-2">{{ 'QRCODE.text24' | translate }}</p>
+              <table class="table table-striped">
+                <thead>
+                  <tr class="tr-section text-primary">
+                    <th width="70%" >{{ 'QRCODE.text9' | translate }}</th>
+                    <th width="20%" class="text-center" >{{ 'QRCODE.text22' | translate }}</th>
+                    <th width="10%" >%</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="loader.scansByLocation">
+                    <td colspan="3" class="text-center pad-20">
+                      <div class="spinner-border text-success text-center" role="status"></div>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let ls of filtered_locationScans" [hidden]="ls.key > pager.end || ls.key < pager.start">
+                    <td width="70%">{{ ls.Location }}</td>
+                    <td width="20%" class="text-center">{{ ls.LocationCount }}</td>
+                    <td width="10%">{{ ls.Percentage | number: '1.0-0' }}</td>
+                  </tr>
+                  <tr *ngIf="filtered_locationScans.length < 1 && !loader.scansByLocation">
+                    <td colspan="3" class="text-center text-gray fs-20">{{ 'QRCODE.text23' | translate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="row justify-content-md-between align-items-md-center">
+              <div class="col col-sm-6">
+                  <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                      <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{filtered_locationScans.length}}</span> {{ 'OTHERS.text6' | translate }}</div>
+                  </div>
+              </div>
+              <div class="col col-sm-6">
+                  <div class="text-sm-right float-sm-end listjs-pagination">
+                    <div class="paginate" *ngIf="filtered_locationScans.length!=0">
+                        <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                        <div class="paginate-page " (click)="setPage(pager.page-1, $event, filtered_locationScans)"><span>◄</span></div>
+                        <div class="paginate-page {{ page==pager.page ? 'current' : '' }}" (click)="setPage(page, $event, filtered_locationScans)" *ngFor="let page of pager.limited_page" ><span>{{page}}</span></div>
+                        <div class="paginate-page " (click)="setPage(pager.page+1, $event, filtered_locationScans)"><span>►</span></div>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #codereport>
+    <div class="card">
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-sm">
+            <div class="d-flex gap-1">
+              <ng-select placeholder="{{ 'OTHERS.text1' | translate }}" [items]="qrCodeListSelectValue" bindLabel="name" [multiple]="true" [(ngModel)]="qrCodeListFilterColumn" (change)="filterQRCodeList()"></ng-select>
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="d-flex justify-content-sm-end">
+              <div class="search-box ms-2">
+                <input type="text" class="form-control search" placeholder="{{ 'OTHERS.text2' | translate }}..." [(ngModel)]="qrCodeFilterKeyword" (keyup)="filterQRCodeList()">
+                <i class="ri-search-line search-icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 py-4">
+            <div class="table-responsive table-card table-striped">
+              <table class="table table-striped">
+                <thead>
+                  <tr class="tr-section">
+                    <th>{{ 'QRCODE.text25' | translate }}</th> <!-- QRCode ID -->
+                    <th>{{ 'QRCODE.text5' | translate }}</th> <!-- QR Name -->
+                    <th>{{ 'QRCODE.text11' | translate }}</th> <!-- Status -->
+                    <th>{{ 'QRCODE.text33' | translate }}</th> <!-- Source -->
+                    <th>{{ 'QRCODE.text17' | translate }}</th> <!-- Date Created -->
+                    <th>{{ 'QRCODE.text52' | translate }}</th> <!-- # of Scans -->
+                    <th class="text-right">{{ 'QRCODE.text29' | translate }}</th> <!-- Success Rate -->
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="loader.codeUseHistory">
+                    <td colspan="12" class="text-center pad-20">
+                      <div class="spinner-border text-success text-center" role="status"></div>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let qrList of qrCodeListFiltered" [hidden]="qrList.key > pager.end || qrList.key < pager.start">
+                    <td>
+                      <img src="./assets/images/qr-demo.png" class="qr">
+                      <span>{{ qrList.QRid }}</span>
+                    </td>
+                    <td>{{ qrList.QRCodeName }}</td>
+                    <td class="status">
+                      <span class="{{ statusInfo(qrList.QRStatus, 'color') }} fw-semibold">{{ qrList.QRStatus }}</span>
+                    </td>
+                    <td>{{ convertSource(qrList.QRSourceEntry) }}</td>
+                    <td>{{ qrList.QRCreateDate | date: 'YYYY-MM-d' }}</td>
+                    <td>{{ qrList.NumberOfScans }}</td>
+                    <td class="text-right"><span>{{ qrList.QRSuccessRate }}%</span></td>
+                    <td class="text-center">
+                      <div class="btn-group btn-group-sm">
+                        <button class="btn btn-clear fs-15" *ngIf="access.permissions['QR Code Report'] && access.permissions['QR Code Report'].includes('E')" (click)="viewQRCode(centerDataModal, qrList)" title="Update"><i class="ri-edit-2-line pointer"></i></button>
+                        <button class="btn btn-clear fs-15" *ngIf="access.permissions['QR Code Report'] && access.permissions['QR Code Report'].includes('D')" (click)="deleteQRCode(deleteConfirmModal, qrList)" [disabled]="statusInfo(qrList.QRStatus, 'state')" title="Delete"><i class="ri-delete-bin-line pointer"></i></button>
+                        <button class="btn btn-clear fs-15" (click)="toggleDetails(qrList)" title="View Details"><i class="ri-eye-line pointer"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr *ngIf="qrCodeListFiltered.length < 1 && !loader.codeUseHistory">
+                    <td colspan="12" class="text-center text-gray fs-20">{{ 'QRCODE.text30' | translate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="row justify-content-md-between align-items-md-center">
+              <div class="col col-sm-6">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{qrCodeListFiltered.length}}</span> {{ 'OTHERS.text6' | translate }}</div>
+                </div>
+              </div>
+              <div class="col col-sm-6">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                  <div class="paginate" *ngIf="qrCodeListFiltered.length!=0">
+                    <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                    <div class="paginate-page " (click)="setPage(pager.page-1, $event, qrCodeListFiltered)"><span>◄</span></div>
+                    <div class="paginate-page {{ page==pager.page ? 'current' : '' }}" (click)="setPage(page, $event, qrCodeListFiltered)" *ngFor="let page of pager.limited_page" ><span>{{page}}</span></div>
+                    <div class="paginate-page " (click)="setPage(pager.page+1, $event, qrCodeListFiltered)"><span>►</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #centerDataModal let-modal>
+  <div class="modal-body no-getch">
+    <div class="mt-1 mb-3" *ngIf="!qrcodeData.id">
+      <span class="fs-24 text-primary fw-bold">{{ 'QRCODE.text13' | translate }}<br></span> 
+    </div>
+    <div class="mt-1">
+      <form action="javascript:void(0);">
+        <div class="row g-3">
+          <div class="col-xxl-12" *ngIf="qrcodeData.id">
+            <div class="text-center qr-container" *ngIf="qrcodeData.source != '1'">
+              <img [src]="qrcodeData.link" class="details-qr">
+              <a class="dl-btn" title="download" download="{{ qrcodeData.name }}.png" href="{{ qrcodeData.link }}">
+                <buttton type="button" class="btn btn-info">
+                  <i class="ri-download-2-line"></i>
+                </buttton>
+              </a>
+            </div>
+            <div class="text-center w-100" *ngIf="showStatusUpdate">
+              <div class="w-100 text-center">
+                <ul ngbNav #PillsJustified="ngbNav" [activeId]="qrcodeData.statusToggle" class="nav-pills switcher" >
+                  <li [ngbNavItem]="'1'" (click)="qrcodeData.statusToggle='1'">
+                      <a ngbNavLink>{{ 'QRCODE.text31' | translate }}</a>
+                  </li>
+                  <li [ngbNavItem]="'7'" (click)="(qrcodeData.status!='Inactive' ? qrcodeData.statusToggle='7' : '')" [disabled]="qrcodeData.status=='Inactive'" >
+                    <a ngbNavLink class="deactivate"><span class="d-sm-block">{{ 'QRCODE.text32' | translate }}</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div> 
+          </div>
+          <div class="col-xxl-12">
+            <form class="form-group form-dark">
+              <div class="mb-3">
+                <label class="form-label">{{ 'QRCODE.text5' | translate }}</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" [(ngModel)]="qrcodeData.name" [ngModelOptions]="{standalone:true}">
+                </div>  
+              </div>
+              <div class="mb-3">
+                <label class="form-label">{{ 'QRCODE.text33' | translate }}</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" [disabled]="1" value="{{ 'QRCODE.text34' | translate }}" *ngIf="qrcodeData.source == '1'">
+                  <select *ngIf="qrcodeData.source != '1'" class="form-control {{ qrcodeData.source == '' ? 'text-gray' : '' }}" [(ngModel)]="qrcodeData.source" [ngModelOptions]="{standalone:true}" >
+                    <option value="" class="text-gray">- {{ 'QRCODE.text53' | translate }} -</option>
+                    <option value="2" class="text-black">{{ 'QRCODE.text35' | translate }}</option>
+                    <option value="3" class="text-black">{{ 'QRCODE.text36' | translate }}</option>
+                    <option value="4" class="text-black">{{ 'QRCODE.text37' | translate }}</option>
+                    <option value="5" class="text-black">{{ 'QRCODE.text38' | translate }}</option>
+                    <option value="6" class="text-black">{{ 'QRCODE.text39' | translate }}</option>
+                    <option value="0" class="text-black">{{ 'QRCODE.text40' | translate }}</option>
+                  </select>
+                </div>  
+              </div>
+              <div class="mb-3" *ngIf="qrcodeData.source == '0'">
+                <label class="form-label">* {{ 'QRCODE.text41' | translate }}</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" [(ngModel)]="qrcodeData.sourceOthers" [ngModelOptions]="{standalone:true}">
+                </div>  
+              </div>
+            </form>
+          </div>
+          <div class="col-6 d-grid gap-2 mx-auto">
+            <button type="button" class="btn btn-clear font-size-12" (click)="modal.close()">
+              {{ 'QRCODE.text47' | translate }}
+            </button>
+          </div>
+          <div class="col-6 d-grid gap-2 mx-auto" >      
+            <button *ngIf="qrcodeData.id" type="button" class="btn btn-primary font-size-12" 
+            [disabled]="!qrcodeData.name || !qrcodeData.source || ( qrcodeData.source == '0' ? !qrcodeData.sourceOthers : '' )"
+            (click)="updateQRCode(updateStatusModal)">
+            {{ 'QRCODE.text48' | translate }}
+            </button>
+            <button *ngIf="!qrcodeData.id" type="button" class="btn btn-primary font-size-12" 
+            [disabled]="!qrcodeData.name || !qrcodeData.source || ( qrcodeData.source == '0' ? !qrcodeData.sourceOthers : '' )"
+            (click)="confirmCreateQRCode()">
+            {{ 'QRCODE.text49' | translate }}
+            </button>
+          </div>  
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #deleteConfirmModal id="deleteConfirmModal" role="document" let-modal>
+  <div class="modal-body">
+    <div class="mt-1 mb-3">
+        <span class="fs-24 text-danger fw-bold">
+          {{ 'QRCODE.text54' | translate }}<br>
+        </span> 
+        <p class="mt-3">
+          <span *ngIf="qrcodeData.source == '1'">{{ 'QRCODE.text60' | translate }}<br><br></span>
+          {{ 'QRCODE.text50' | translate }}: <b>{{ qrcodeData.name }} ({{ qrcodeData.id }})</b><br>
+        </p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="row w-100">
+      <div class="col">
+        <div class="hstack gap-2 justify-content-end">
+          <button type="button" class="btn w-50 btn-clear" (click)="modal.close('Close click')">{{ 'QRCODE.text47' | translate }}</button>
+          <button type="submit" class="btn w-50 btn-danger" (click)="confirmDeleteQRCode()">{{ 'QRCODE.text51' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #updateStatusModal id="updateStatusModal" role="document" let-modal>
+  <div class="modal-body">
+    <div *ngIf="qrcodeData.source!='1'">
+      <p class="mt-3" *ngIf="qrcodeData.statusToggle == '1'">{{ 'QRCODE.text56' | translate }}: <b>{{ qrcodeData.id }}</b> {{ 'QRCODE.text58' | translate }}.</p>
+      <p class="mt-3" *ngIf="qrcodeData.statusToggle == '7'">{{ 'QRCODE.text57' | translate }}: <b>{{ qrcodeData.id }}</b> {{ 'QRCODE.text70' | translate }}.</p>
+    </div>
+    <div *ngIf="qrcodeData.source=='1'">
+      <p class="mt-3">{{ 'QRCODE.text69' | translate }}.</p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="row w-100">
+      <div class="col">
+        <div class="hstack gap-2 justify-content-end">
+          <button type="button" class="btn w-50 btn-clear" (click)="modal.close('Close click')">{{ 'QRCODE.text47' | translate }}</button>
+          <button type="submit" class="btn w-50 btn-success" (click)="updateConfirm()">{{ 'QRCODE.text59' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

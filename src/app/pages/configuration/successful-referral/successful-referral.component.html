@@ -1,0 +1,113 @@
+<app-breadcrumbs title="{{ 'REFERRAL_CONFIGURATION.text1' | translate }}" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="row mb-2 mt-3">
+    <div class="col-lg-12 fw-bold fs-20">{{ 'REFERRAL_CONFIGURATION.text1' | translate }}</div>
+</div>
+<div class="row" *ngIf="access.permissions['Referral Condition'] && access.permissions['Referral Condition'].includes('R')">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="mt-3">
+                    <div class="row g-4 mb-3">
+                        <div class="col-sm-auto">
+                            <div class="d-flex gap-1" >
+                                <ng-select placeholder="{{ 'OTHERS.text1' | translate }}" [items]="selectValue" bindLabel="name" [multiple]="true" [(ngModel)]="filter_column" (change)="filter_fees()"></ng-select>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="d-flex justify-content-sm-end">
+                                <div class="search-box ms-2">
+                                    <input type="text" class="form-control search" placeholder="{{ 'OTHERS.text2' | translate }}..." [(ngModel)]="filter_keyword" (keyup)="filter_fees()">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive table-card mt-3 mb-1">
+                        <table class="table ">
+                            <thead>
+                                <tr class="tr-section text-primary">
+                                    <th>{{ 'REFERRAL_CONFIGURATION.text2' | translate }}</th>
+                                    <th>{{ 'REFERRAL_CONFIGURATION.text3' | translate }}</th>
+                                    <th>{{ 'REFERRAL_CONFIGURATION.text4' | translate }}</th>
+                                    <th>{{ 'REFERRAL_CONFIGURATION.text5' | translate }}</th>
+                                    <th *ngIf="access.permissions['Referral Condition'] && access.permissions['Referral Condition'].includes('E')">{{ 'REFERRAL_CONFIGURATION.text6' | translate }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let data of filtered_feeList" [hidden]="data.key > pager.end || data.key < pager.start">
+                                <td width="">{{ ( data.missionConditionId ? data.missionConditionId : '-' ) }}</td>
+                                <td width="">{{ ( data.missionConditionDescription ? data.missionConditionDescription : '-' ) }}</td>
+                                <td width="">{{ data.missionConditionAmount | currency }}</td>
+                                <td width="">{{ ( data.missionConditionCreateDate ? data.missionConditionCreateDate : '-' ) }}</td>
+                                <td width="5%" class="text-center" *ngIf="access.permissions['Referral Condition'] && access.permissions['Referral Condition'].includes('E')"><button class="btn bg-transparent btn-sm" (click)="openModal(content, data)"> <img src="./assets/icon-edit.png" width="16"> </button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row justify-content-md-between align-items-md-center">
+                        <div class="col col-sm-6">
+                            <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                                <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{filtered_feeList.length}}</span> {{ 'OTHERS.text6' | translate }}</div>
+                            </div>
+                        </div>
+                        <div class="col col-sm-6">
+                            <div class="text-sm-right float-sm-end listjs-pagination">
+                                <div class="paginate" *ngIf="filtered_feeList.length!=0">
+                                    <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                                        <div class="paginate-page " (click)="setPage(pager.page-1, $event)"><span>◄</span></div>
+                                        <div class="paginate-page {{ page==pager.page ? 'current' : '' }}" (click)="setPage(page, $event)" *ngFor="let page of pager.limited_page" ><span>{{page}}</span></div>
+                                        <div class="paginate-page " (click)="setPage(pager.page+1, $event)"><span>►</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #content role="document" let-modal>
+    <div class="modal-header modal-head-padding">
+        <h5 class="modal-title">{{ active.description }}</h5>
+    </div>
+    <form>
+        <div class="modal-body">
+            <div class="mb-2">
+                <div class="row">
+                    <div class="col">
+                        <p class="form-label fs-10" *ngIf="active.id == '2'"><b>{{ 'REFERRAL_CONFIGURATION.text12' | translate }}</b> ({{ 'REFERRAL_CONFIGURATION.text13' | translate }})</p>
+                        <p class="form-label fs-10" *ngIf="active.id == '1'"><b>{{ 'REFERRAL_CONFIGURATION.text14' | translate }}</b></p>
+                        <input type="tel" class="form-control" placeholder="$0" 
+                        (keypress)="numbersOnly($event)" maxlength="12" 
+                        [(ngModel)]="active.amount" [ngModelOptions]="{standalone: true}" 
+                        onPaste="return false" onDrop = "return false" autocomplete=off >
+                    </div>
+                </div>
+            </div>
+
+            <div class="row fs-11 mt-4">
+                <div class="col">
+                    <p>
+                        <i class="mdi mdi-information text-muted fs-16 align-middle me-1"></i> {{ 'REFERRAL_CONFIGURATION.text7' | translate }}. <br>
+                        <i class="mdi mdi-information text-muted fs-16 align-middle me-1"></i> {{ 'REFERRAL_CONFIGURATION.text8' | translate }}. <br>
+                        <i class="mdi mdi-information text-muted fs-16 align-middle me-1"></i> {{ 'REFERRAL_CONFIGURATION.text9' | translate }}. 
+                    </p>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <div class="hstack gap-2 w-100">
+                <button type="button" class="btn btn-clear w-30" data-bs-dismiss="modal" (click)="modal.close()">{{ 'REFERRAL_CONFIGURATION.text10' | translate }}</button>
+                <button type="submit" class="btn btn-primary w-70"
+                [disabled]="!active.amount"
+                (click)="process_fee()"
+                >{{ 'REFERRAL_CONFIGURATION.text11' | translate }}</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+  <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

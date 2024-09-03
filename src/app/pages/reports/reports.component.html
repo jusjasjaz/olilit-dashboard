@@ -1,0 +1,379 @@
+<app-breadcrumbs title="Reports" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="fw-bold fs-20">Reports</div>
+
+<div class="" *ngIf="access.permissions['User Management'] && access.permissions['User Management'].includes('R')">
+  <ul ngbNav #nav="ngbNav" [activeId]="(activeId == '1' ? 1 : (activeId == '2' ? 2 : 3))" class="mt-3 nav nav-tabs nav-light">
+      <li [ngbNavItem]="1" (click)="load_users()">
+          <a ngbNavLink class="text-dark">
+              <span class="d-sm-block tab-active">Customer Transactions</span>
+          </a>
+          <ng-template ngbNavContent>
+              <ng-template [ngTemplateOutlet]="users"></ng-template>
+          </ng-template>
+      </li>
+
+      <li [ngbNavItem]="2" (click)="load_group()">
+          <a ngbNavLink class="text-dark">
+              <span class="d-sm-block">Merchant Transactions</span>
+          </a>
+          <ng-template ngbNavContent>
+              <ng-template [ngTemplateOutlet]="groups"></ng-template>
+          </ng-template>
+      </li>
+
+  </ul>
+
+  <div class="tab-content  text-muted">
+      <div [ngbNavOutlet]="nav"></div>
+  </div>
+
+</div>
+
+
+
+<!-- TABS CONTENT -->
+<ng-template #users>
+    <div class="card">
+        <div class="card-body">
+            <div class="row g-4 mb-3">
+                <div class="col-sm-auto">
+                  <div class="d-flex gap-1" *ngIf="user_selectValue.length > 0">
+                    <ng-select placeholder="{{ 'OTHERS.text1' | translate }}" [items]="user_selectValue" bindLabel="name" [multiple]="true" [(ngModel)]="filter_column" (change)="filter_users()"></ng-select>
+                  </div>
+                </div>
+                <div class="col-sm">
+                    <div class="d-flex justify-content-sm-end">
+                        <div class="search-box ms-2">
+                            <input type="text" class="form-control search" placeholder="{{ 'OTHERS.text2' | translate }}..." [(ngModel)]="filter_keyword" (keyup)="filter_users()">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-add btn-sm px-4" (click)="openModal(userPop)" *ngIf="access.permissions['User'] && access.permissions['User'].includes('A')">{{ 'USER_MANAGEMENT.USERS.text1' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+            <div >                
+                <div id="customerList">  
+                    <div class="table-responsive table-card mt-3 mb-1">
+                        <table class="table">
+                          <thead>
+                          <tr class="tr-section text-primary">
+                          <th>Date/Time</th>
+                          <th>Transaction ID</th>
+                          <th>Activity Type</th>
+                          <th>Description</th>
+                          <th>Total Amount</th>
+                          <th>Status</th>
+                          <th class="text-center" *ngIf="access.permissions['User'] && (access.permissions['User'].includes('E') || access.permissions['User'].includes('D'))">{{ 'USER_MANAGEMENT.USERS.text10' | translate }}</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr *ngFor="let data of filtered_userList" [hidden]="data.key > pager.end || data.key < pager.start">
+                            <td>{{ data.firstName }}</td>
+                            <td>{{ data.lastName }}</td>
+                            <td>{{ data.email }}</td>
+                            <td>{{ data.roleName }}</td>
+                            <td>{{ data.groupName }}</td>
+                            <td class="status">
+                              <span class="badge badge-soft-{{ data.status == 'A' ? 'success' : data.status == 'F' ? 'danger' : 'warning' }} text-uppercase">
+                                {{ data.status == 'A' ? 'Success' : data.status == 'F' ? 'Failed' : 'Pending' }}
+                              </span>
+                            </td>
+                            <td class="text-center" *ngIf="access.permissions['User'] && (access.permissions['User'].includes('E') || access.permissions['User'].includes('D'))">
+                              <!-- <button class="btn bg-transparent btn-sm" (click)="openModal(change_password, data)"> <img src="./assets/icon-lock.png" width="16"> </button> -->
+                              <button class="btn bg-transparent btn-sm" (click)="openModal(userPop, data, 'user')" *ngIf="access.permissions['User'] && access.permissions['User'].includes('E')"> <img src="./assets/icon-edit.png" width="16"> </button>
+                              <button class="btn bg-transparent btn-sm" (click)="openModal(deleteConfirm, data.userId, 'del_user', data.email);" *ngIf="access.permissions['User'] && access.permissions['User'].includes('D')"> <img src="./assets/icon-trash.svg" width="16"> </button>
+                            </td>
+                          </tr>
+                          </tbody>
+                        </table>
+                    </div>
+  
+                    <div class="row justify-content-md-between align-items-md-center">
+                      <div class="col col-sm-6">
+                        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                          <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{filtered_userList.length}}</span> {{ 'OTHERS.text6' | translate }}</div>
+                        </div>
+                      </div>
+                      <!-- Pagination -->
+                      <div class="col col-sm-6">
+                          <div class="text-sm-right float-sm-end listjs-pagination">
+                            <div class="paginate" *ngIf="filtered_userList.length!=0">
+                              <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                              <div class="paginate-page " (click)="userSetPage(pager.page-1, $event)"><span>◄</span></div>
+                              <div class="paginate-page {{ page==pager.page ? 'current' : '' }}" (click)="userSetPage(page, $event)" *ngFor="let page of pager.limited_page" ><span>{{page}}</span></div>
+                              <div class="paginate-page " (click)="userSetPage(pager.page+1, $event)"><span>►</span></div>
+                              </div>
+                          </div>
+                          </div>
+                      </div>
+                      <!-- End Pagination -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #groups>
+  <div class="card">
+    <div class="card-body">
+        <div class="row g-4 mb-3">
+            <div class="col-sm-auto">
+                <div class="d-flex gap-1" *ngIf="group_selectValue.length > 0">
+                  <ng-select placeholder="{{ 'OTHERS.text1' | translate }}" [items]="group_selectValue" bindLabel="name" [multiple]="true" [(ngModel)]="filter_column" (change)="filter_group()"></ng-select>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="d-flex justify-content-sm-end">
+                  <div class="search-box ms-2">
+                    <input type="text" class="form-control search" placeholder="{{ 'OTHERS.text2' | translate }}..." [(ngModel)]="filter_keyword" (keyup)="filter_group()">
+                    <i class="ri-search-line search-icon"></i>
+                  </div>
+                  <button type="button" class="btn btn-primary btn-add btn-sm px-4" (click)="openModal(groupPop)" *ngIf="access.permissions['Group'] && access.permissions['Group'].includes('A')">{{ 'USER_MANAGEMENT.GROUPS.text1' | translate }}</button>
+                </div>
+            </div>
+        </div>
+        <div >                
+            <div id="customerList">  
+                <div class="table-responsive table-card mt-3 mb-1">
+                    <table class="table">
+                      <thead>
+                      <tr class="tr-section text-primary">
+                      <th>{{ 'USER_MANAGEMENT.GROUPS.text2' | translate }}</th>
+                      <th>{{ 'USER_MANAGEMENT.GROUPS.text3' | translate }}</th>
+                      <th>{{ 'USER_MANAGEMENT.GROUPS.text4' | translate }}</th>
+                      <th>{{ 'USER_MANAGEMENT.GROUPS.text5' | translate }}</th>
+                      <th class="text-center" *ngIf="access.permissions['Group'] && (access.permissions['Group'].includes('E') || access.permissions['Group'].includes('D'))">{{ 'USER_MANAGEMENT.GROUPS.text6' | translate }}</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr *ngFor="let data of filtered_groupList" [hidden]="data.key > pager.end || data.key < pager.start">
+                        <td>{{ data.groupsCode }}</td>
+                        <td>{{ data.groupsName }}</td>
+                        <td>{{ data.groupsDescription }}</td>
+                        <td>{{ data.groupsUpdateDate }}</td>
+                        <td class="text-center" *ngIf="access.permissions['Group'] && (access.permissions['Group'].includes('E') || access.permissions['Group'].includes('D'))">
+                          <button class="btn bg-transparent btn-sm" (click)="openModal(groupPop, data, 'group')" *ngIf="access.permissions['Group'] && access.permissions['Group'].includes('E')"> <img src="./assets/icon-edit.png" width="16"> </button>
+                          <button class="btn bg-transparent btn-sm" (click)="openModal(deleteConfirm, data.groupsId, 'del_group', data.groupsName);" *ngIf="access.permissions['Group'] && access.permissions['Group'].includes('D')"> <img src="./assets/icon-trash.svg" width="16"> </button>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                </div>
+
+                <div class="row justify-content-md-between align-items-md-center">
+                  <div class="col col-sm-6">
+                    <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                      <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{filtered_groupList.length}}</span> {{ 'OTHERS.text6' | translate }}</div>
+                    </div>
+                  </div>
+                  <!-- Pagination -->
+                  <div class="col col-sm-6">
+                    <div class="text-sm-right float-sm-end listjs-pagination">
+                      <div class="paginate" *ngIf="filtered_groupList.length!=0">
+                        <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                        <div class="paginate-page " (click)="groupSetPage(pager.page-1, $event)"><span>◄</span></div>
+                        <div class="paginate-page {{ page==pager.page ? 'current' : '' }}" (click)="groupSetPage(page, $event)" *ngFor="let page of pager.limited_page" ><span>{{page}}</span></div>
+                        <div class="paginate-page " (click)="groupSetPage(pager.page+1, $event)"><span>►</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Pagination -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</ng-template>
+
+<!-- CHANGE PASSWORD POPUP NOT USED BUT READY -->
+
+<ng-template #change_password id="change_password" role="document" let-modal>
+  <div class="modal-body">
+    <div class="fs-18 text-dark fw-bold">Change Password</div>
+
+    <div class="mt-3">
+      <span class="text-danger">*</span>&nbsp;<label for="placeholderInput" class="form-label">Old Password</label>
+      <div class="position-relative auth-pass-inputgroup mb-3">
+        <input [type]="togglePass.old ? 'text' : 'password'" class="form-control pe-5" [(ngModel)]="change_pass.old" [ngModelOptions]="{standalone:true}">
+        <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="password-addon">
+          <i class="mdi align-middle" [ngClass]="{'mdi-eye-off-outline': !togglePass.old, 'mdi-eye-outline': togglePass.old}" (click)="toggleEye('old')"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <span class="text-danger">*</span>&nbsp;<label for="placeholderInput" class="form-label">New Password</label>
+      <div class="position-relative auth-pass-inputgroup mb-3">
+        <input [type]="togglePass.new ? 'text' : 'password'" class="form-control pe-5" [(ngModel)]="change_pass.new" [ngModelOptions]="{standalone:true}">
+        <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="password-addon">
+          <i class="mdi align-middle" [ngClass]="{'mdi-eye-off-outline': !togglePass.new, 'mdi-eye-outline': togglePass.new}" (click)="toggleEye('new')"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <span class="text-danger">*</span>&nbsp;<label for="placeholderInput" class="form-label">Confirm New Password</label>
+      <div class="position-relative auth-pass-inputgroup mb-3">
+        <input [type]="togglePass.confirm ? 'text' : 'password'" class="form-control pe-5" [(ngModel)]="change_pass.confirm" [ngModelOptions]="{standalone:true}">
+        <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="password-addon">
+          <i class="mdi align-middle" [ngClass]="{'mdi-eye-off-outline': !togglePass.confirm, 'mdi-eye-outline': togglePass.confirm}" (click)="toggleEye('confirm')"></i>
+        </button>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <div class="row w-100">
+      <div class="col">
+        <div class="hstack gap-2 justify-content-end">
+          <button type="button" class="btn w-50 btn-clear" (click)="modal.close('Close click')">Cancel</button>
+          <button type="submit" class="btn w-50 btn-primary" 
+          [disabled]="!change_pass.old || !change_pass.new || !change_pass.confirm"
+          >Update Passwod</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- USER POPUP -->
+
+<ng-template #userPop id="userPop" role="document" let-modal>
+  <div class="modal-body">
+    <div class="fs-18 text-dark fw-bold">{{ !user_details.id ? ( 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text1' | translate ) : ( 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text2' | translate ) }}</div>
+
+    <div *ngIf="!user_details.id">
+      <div class="mt-3">
+        <span class="text-danger">*</span>&nbsp;<label for="placeholderInput" class="form-label">{{ 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text3' | translate }}</label>
+        <input type="text" class="form-control" [(ngModel)]="user_details.username" [ngModelOptions]="{standalone:true}">
+      </div>
+      <div class="mt-3">
+        <span class="text-danger">*</span>&nbsp;<label for="placeholderInput" class="form-label">{{ 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text4' | translate }}</label>
+        <div class="position-relative auth-pass-inputgroup mb-3">
+          <input [type]="togglePass.add ? 'text' : 'password'" class="form-control pe-5" [(ngModel)]="user_details.password" [ngModelOptions]="{standalone:true}">
+          <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="password-addon">
+            <i class="mdi align-middle" [ngClass]="{'mdi-eye-off-outline': !togglePass.add, 'mdi-eye-outline': togglePass.add}" (click)="toggleEye('add')"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mt-3">
+        <span class="text-danger">*</span>&nbsp;<label for="placeholderInput" class="form-label">{{ 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text5' | translate }}</label>
+        <select class="form-select mb-3" [(ngModel)]="user_details.role" [ngModelOptions]="{standalone:true}">
+          <option *ngFor="let rl of roleList" value="{{ rl.rolesId }}">{{ rl.rolesName }}</option>
+        </select>
+      </div>
+      <div class="mt-3 row">
+        <div class="col-sm-4">
+          <span class="text-danger">*</span>&nbsp;<label for="placeholderInput" class="form-label">{{ 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text6' | translate }}</label>
+          <input type="text" class="form-control" [(ngModel)]="user_details.fname" [ngModelOptions]="{standalone:true}">
+        </div>
+        <div class="col-sm-4">
+          <label for="placeholderInput" class="form-label">{{ 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text7' | translate }}</label>
+          <input type="text" class="form-control" [(ngModel)]="user_details.mname" [ngModelOptions]="{standalone:true}">
+        </div>
+        <div class="col-sm-4">
+          <span class="text-danger">*</span>&nbsp;<label for="placeholderInput" class="form-label">{{ 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text8' | translate }}</label>
+          <input type="text" class="form-control" [(ngModel)]="user_details.lname" [ngModelOptions]="{standalone:true}">
+        </div>
+      </div>
+      <div class="mt-3">
+        <label for="placeholderInput" class="form-label">{{ 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text9' | translate }}</label>
+        <input type="text" class="form-control" [(ngModel)]="user_details.title" [ngModelOptions]="{standalone:true}">
+      </div>
+      <div class="mt-3">
+        <label for="placeholderInput" class="form-label">{{ 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text10' | translate }}</label>
+        <input type="text" class="form-control" [(ngModel)]="user_details.mobile" [ngModelOptions]="{standalone:true}">
+      </div>
+      <div class="mt-3">
+        <label for="placeholderInput" class="form-label">{{ 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text11' | translate }}</label>
+        <input type="text" class="form-control" [(ngModel)]="user_details.address" [ngModelOptions]="{standalone:true}">
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <div class="row w-100">
+      <div class="col">
+        <div class="hstack gap-2 justify-content-end">
+          <button type="button" class="btn w-50 btn-clear" (click)="modal.close('Close click')">{{ 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text12' | translate }}</button>
+
+          <button *ngIf="!user_details.id" type="submit" class="btn w-50 btn-primary" (click)="processUser('add')" 
+          [disabled]="!user_details.username || !user_details.password ||
+                      !user_details.role || !user_details.fname || !user_details.lname"
+          >{{ 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text13' | translate }}</button>
+
+          <button *ngIf="user_details.id" type="submit" class="btn w-50 btn-primary" (click)="processUser('update')" 
+          [disabled]="!user_details.role || !user_details.fname || !user_details.lname"
+          >{{ 'USER_MANAGEMENT.USERS.ADD_UPDATE_USER.text13' | translate }}</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- GROUP POPUP -->
+
+<ng-template #groupPop id="groupPop" role="document" let-modal>
+  <div class="modal-body">
+    <div class="fs-18 text-dark fw-bold">{{ !group_details.id ? ( 'USER_MANAGEMENT.GROUPS.ADD_UPDATE_GROUP.text1' | translate ) : ( 'USER_MANAGEMENT.GROUPS.ADD_UPDATE_GROUP.text2' | translate ) }}</div>
+    <div class="mt-3">
+      <label for="placeholderInput" class="form-label">{{ 'USER_MANAGEMENT.GROUPS.ADD_UPDATE_GROUP.text3' | translate }}</label>
+      <input type="text" class="form-control" [(ngModel)]="group_details.code" [ngModelOptions]="{standalone:true}">
+    </div>
+    <div class="mt-3">
+      <label for="placeholderInput" class="form-label">{{ 'USER_MANAGEMENT.GROUPS.ADD_UPDATE_GROUP.text4' | translate }}</label>
+      <input type="text" class="form-control" [(ngModel)]="group_details.name" [ngModelOptions]="{standalone:true}">
+    </div>
+    <div class="mt-3">
+      <label for="placeholderInput" class="form-label">{{ 'USER_MANAGEMENT.GROUPS.ADD_UPDATE_GROUP.text5' | translate }}</label>
+       <textarea class="form-control" [(ngModel)]="group_details.description" [ngModelOptions]="{standalone:true}"></textarea>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="row w-100">
+      <div class="col">
+        <div class="hstack gap-2 justify-content-end">
+          <button type="button" class="btn w-50 btn-clear" (click)="modal.close('Close click')">{{ 'USER_MANAGEMENT.GROUPS.ADD_UPDATE_GROUP.text6' | translate }}</button>
+          <button type="submit" class="btn w-50 btn-primary" [disabled]="!group_details.code || !group_details.name || !group_details.description" 
+          (click)="process_group()">{{ 'USER_MANAGEMENT.GROUPS.ADD_UPDATE_GROUP.text7' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #deleteConfirm id="deleteConfirm" role="document" let-modal>
+  <div class="modal-body text-center">
+    <!-- <div class="mt-3 mb-3 fs-18 fw-bold text-danger"></div> -->
+    <div class="mt-3 mb-3 fs-18 fw-bold">
+      <span class="text-danger">
+        {{
+          delete_selected.user ? ( 'USER_MANAGEMENT.USERS.DELETE_USER.text1' | translate ) :
+          ( delete_selected.group ? ( 'USER_MANAGEMENT.GROUPS.DELETE_GROUP.text1' | translate ) : 
+          ( 'USER_MANAGEMENT.ROLES.DELETE_ROLE.text1' | translate ) )
+        }} <br>
+      </span> 
+      {{ delete_selected.display }}</div>
+  </div>
+  <div class="modal-footer">
+    <div class="row w-100">
+      <div class="col">
+        <div class="hstack gap-2 justify-content-end">
+          <button type="button" class="btn w-50 btn-clear" (click)="modal.close('Close click')">{{ 'USER_MANAGEMENT.USERS.DELETE_USER.text2' | translate }}</button>
+          <button type="submit" class="btn w-50 btn-danger" (click)="delete_confirm()">{{ 'USER_MANAGEMENT.USERS.DELETE_USER.text3' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

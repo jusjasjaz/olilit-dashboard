@@ -1,0 +1,144 @@
+// Color variables
+$white:    #fff;
+$gray-100: #f3f6f9;
+$gray-200: #eff2f7;
+$gray-300: #e9ebec;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #878a99;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black:    #000;
+
+// Grays map
+$grays: (
+  "100": $gray-100,
+  "200": $gray-200,
+  "300": $gray-300,
+  "400": $gray-400,
+  "500": $gray-500,
+  "600": $gray-600,
+  "700": $gray-700,
+  "800": $gray-800,
+  "900": $gray-900
+);
+
+$primary-color:   #959595;
+$secondary-color: #04508C;
+$danger-color:    #DF4D4D;
+$warning-color:   #f7b84b;
+$success-color:   #43B864;
+$dark-color:      #171717;
+$dark-gray-color: #4D4D4D;
+
+// Colors map
+$colors: (
+  "primary":    $primary-color,
+  "secondary":  $secondary-color,
+  "danger":     $danger-color,
+  "warning":    $warning-color,
+  "success":    $success-color,
+  "light":      $gray-100,
+  "dark":       $dark-color,
+  "dark-gray":  $dark-gray-color,
+  "gray":       $gray-600,
+);
+
+// Theme color variables
+$primary:       $primary-color;
+$secondary:     $secondary-color;
+$danger:        $danger-color;
+$warning:       $warning-color;
+$success:       $success-color;
+$light:         $gray-100;
+$dark:          $dark-color;
+$dark-gray:     $dark-gray-color;
+$gray:          $gray-600;
+
+// Theme colors map
+$theme-colors: (
+  "primary":    $primary,
+  "secondary":  $secondary,
+  "danger":     $danger,
+  "warning":    $warning,
+  "success":    $success,
+  "light":      $light,
+  "dark":       $dark,
+  "dark-gray":  $dark-gray,
+  "gray":       $gray,
+);
+
+// Converting theme colors to RGB values
+$theme-colors-rgb: ();
+
+@each $name, $color in $theme-colors {
+  $theme-colors-rgb: map-merge($theme-colors-rgb, (
+    $name: to-rgb($color)
+  ));
+}
+// scss-docs-end theme-colors-rgb
+
+// The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
+// See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
+$min-contrast-ratio:   1.75;
+
+// Customize the light and dark text colors for use in our color contrast function.
+$color-contrast-dark:      $black;
+$color-contrast-light:     $white;
+
+// fusv-disable
+$primary-color-100: tint-color($primary-color, 80%);
+$primary-color-200: tint-color($primary-color, 60%);
+$primary-color-300: tint-color($primary-color, 40%);
+$primary-color-400: tint-color($primary-color, 20%);
+$primary-color-500: $primary-color;
+$primary-color-600: shade-color($primary-color, 20%);
+$primary-color-700: shade-color($primary-color, 40%);
+$primary-color-800: shade-color($primary-color, 60%);
+$primary-color-900: shade-color($primary-color, 80%);
+
+$secondary-color-100: tint-color($secondary-color, 80%);
+$secondary-color-200: tint-color($secondary-color, 60%);
+$secondary-color-300: tint-color($secondary-color, 40%);
+$secondary-color-400: tint-color($secondary-color, 20%);
+$secondary-color-500: $secondary-color;
+$secondary-color-600: shade-color($secondary-color, 20%);
+$secondary-color-700: shade-color($secondary-color, 40%);
+$secondary-color-800: shade-color($secondary-color, 60%);
+$secondary-color-900: shade-color($secondary-color, 80%);
+
+$danger-color-100: tint-color($danger-color, 80%);
+$danger-color-200: tint-color($danger-color, 60%);
+$danger-color-300: tint-color($danger-color, 40%);
+$danger-color-400: tint-color($danger-color, 20%);
+$danger-color-500: $danger-color;
+$danger-color-600: shade-color($danger-color, 20%);
+$danger-color-700: shade-color($danger-color, 40%);
+$danger-color-800: shade-color($danger-color, 60%);
+$danger-color-900: shade-color($danger-color, 80%);
+
+$warning-color-100: tint-color($warning-color, 80%);
+$warning-color-200: tint-color($warning-color, 60%);
+$warning-color-300: tint-color($warning-color, 40%);
+$warning-color-400: tint-color($warning-color, 20%);
+$warning-color-500: $warning-color;
+$warning-color-600: shade-color($warning-color, 20%);
+$warning-color-700: shade-color($warning-color, 40%);
+$warning-color-800: shade-color($warning-color, 60%);
+$warning-color-900: shade-color($warning-color, 80%);
+
+$success-color-100: tint-color($success-color, 80%);
+$success-color-200: tint-color($success-color, 60%);
+$success-color-300: tint-color($success-color, 40%);
+$success-color-400: tint-color($success-color, 20%);
+$success-color-500: $success-color;
+$success-color-600: shade-color($success-color, 20%);
+$success-color-700: shade-color($success-color, 40%);
+$success-color-800: shade-color($success-color, 60%);
+$success-color-900: shade-color($success-color, 80%);
+
+//font variable
+$font-family-secondary:                             'Inter', sans-serif;
+
+$vertical-menu-item-font-family:                  $font-family-secondary;

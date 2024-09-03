@@ -1,0 +1,281 @@
+<app-breadcrumbs title="{{ 'REFERRAL.text1' | translate }}" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<app-qrcode-page *ngIf="selectedReferral.code" [partnerID]="partnerID" [selectedReferral]="selectedReferral" (loadReferrals)="loadReferrals()"></app-qrcode-page>
+
+<div class="row" *ngIf="!selectedReferral.code && access.permissions['Partner Referral List'] && access.permissions['Partner Referral List'].includes('E')">
+
+  <div class="col-lg-12">
+    <div class="d-flex justify-content-sm-end">
+      <button class="btn btn-clear btn-sm back-button mb-2" (click)="backToPartnerList()">
+        <i class="ri-arrow-left-line fs-15 text-primary"></i> 
+        <label class="go-back-label text-primary">{{ 'PARTNER_LIST.text9' | translate }}</label>
+      </button>
+    </div>
+  </div>
+
+  <div class="col-lg-12 mb-2">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-2 mt-1">
+            <h2>{{ partnerName }}</h2>
+          </div>
+          <div class="col-2">
+            <div class="row" style="height: 50px">
+              <div class="details-container">
+                <div class="mb-1">
+                  <div class="label">{{ 'REFERRAL.text32' | translate }}:</div>
+                  <div>{{ partnerData.entries }}</div>
+                </div>
+              </div>
+          </div>
+          </div>
+          <div class="col-2">
+            <div class="row" style="height: 50px">
+              <div class="details-container">
+                <div class="mb-1">
+                  <div class="label">{{ 'REFERRAL.text33' | translate }}:</div>
+                  <div>{{ partnerData.scans }}</div>
+                </div> 
+              </div>
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="row" style="height: 50px">
+              <div class="details-container">
+                <div class="mb-1">
+                  <div class="label">{{ 'REFERRAL.text34' | translate }}:</div>
+                  <div>{{ partnerData.successfulReferrals }}</div>
+                </div>  
+              </div>
+            </div>
+          </div>
+          <div class="col-4 text-right mt-1">
+            <button type="button" class="btn btn-primary btn-add btn-md px-4 mx-1 f-right font-size-12" (click)="createReferral(referralModal)">
+              {{ 'REFERRAL.text2' | translate }} <i class="bx bx-qr"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title mb-0">{{ 'REFERRAL.text1' | translate }}</h4>
+        </div>
+
+          <div class="card-body">
+              <div id="customerList">
+                  <div class="row g-4 mb-4">
+                      <div class="col-sm-auto">
+                        <div class="d-flex justify-content-sm-end">
+                          <div class="d-flex gap-1">
+                            <ng-select placeholder="{{ 'OTHERS.text1' | translate }}" [items]="selectValue" bindLabel="name" [multiple]="true" [(ngModel)]="filterColumn" (change)="filter_referral()"></ng-select>
+                          </div>
+                          <div class="search-box ms-2">
+                              <input type="text" class="form-control search" placeholder="{{ 'OTHERS.text2' | translate }}..." [(ngModel)]="filterKeyword" (keyup)="filter_referral()">
+                              <i class="ri-search-line search-icon"></i>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="table-responsive table-card table-striped">
+                    <table class="table table-striped">
+                      <thead>
+                          <tr class="tr-section text-primary">
+                            <th>{{ 'REFERRAL.text23' | translate }}</th>
+                            <th>{{ 'REFERRAL.text24' | translate }}</th>
+                            <th>{{ 'REFERRAL.text25' | translate }}</th>
+                            <th>{{ 'REFERRAL.text26' | translate }}</th>
+                            <th>{{ 'REFERRAL.text27' | translate }}</th>
+                            <th class="text-center">{{ 'REFERRAL.text16' | translate }}</th>
+                            <th class="text-center">{{ 'REFERRAL.text28' | translate }}</th>
+                            <th class="text-center">{{ 'REFERRAL.text29' | translate }}</th>
+                            <th class="text-right">{{ 'REFERRAL.text30' | translate }}</th>
+                            <th width="10%"></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let data of filteredReferralList" [hidden]="data.key > pager.end || data.key < pager.start">
+                            <td>{{ data.ReferralCode }}</td>
+                            <td>{{ data.ReferralName }}</td>
+                            <td class="status">
+                              <span class="{{ statusInfo(data.Statuses, 'color') }} fw-semibold">{{ data.Statuses }}</span>
+                            </td>
+                            <td>{{ data.DateTimeGenerated | date: 'YYYY-MM-d' }}</td>
+                            <td>{{ (data.ValidUntil | date: 'YYYY') == '5001' ? "No Expiry" : (data.ValidUntil | date: 'YYYY-MM-d') }}</td>
+                            <td class="text-center">{{ data.RestrictedNoOfUsage }}</td>
+                            <td class="text-center">{{ data.NumberOfScans }}</td>
+                            <td class="text-center">{{ ( data.RestrictedNoOfUsage == 'Unlimited' ? data.RestrictedNoOfUsage : data.ScansRemaining ) }}</td>
+                            <td class="text-right">{{ data.SuccessRate | number: '1.0-0' }}%</td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-clear fs-15" *ngIf="access.permissions['Partner Referral List'] && access.permissions['Partner Referral List'].includes('E')" (click)="updateReferral(referralModal, data)" title="Update"><i class="ri-edit-2-line pointer"></i></button>
+                                    <button class="btn btn-clear fs-15" *ngIf="access.permissions['Partner Referral List'] && access.permissions['Partner Referral List'].includes('D')" (click)="deleteReferral(deleteConfirmModal, data)" [disabled]="data.TotalQRCodeUsed > 0" title="Delete"><i class="ri-delete-bin-line pointer"></i></button>
+                                    <button class="btn btn-clear fs-15" (click)="viewReferral(data)" title="Details"><i class="ri-eye-line pointer"></i></button>
+                                </div>
+                            </td>
+                          </tr>
+                          <tr *ngIf="loader">
+                            <td colspan="10" class="text-center pad-20">
+                              <div class="spinner-border text-success text-center" role="status"></div>
+                            </td>
+                          </tr>
+                          <tr *ngIf="filteredReferralList.length < 1 && !loader">
+                            <td colspan="10" class="text-center text-gray fs-20">{{ 'REFERRAL.text3' | translate }}</td>
+                          </tr>
+                      </tbody>
+                    </table>
+                </div>
+
+                <div class="row justify-content-md-between align-items-md-center">
+                  <div class="col col-sm-6">
+                      <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                          <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{filteredReferralList.length}}</span> {{ 'OTHERS.text6' | translate }}</div>
+                      </div>
+                  </div>
+                  <div class="col col-sm-6">
+                      <div class="text-sm-right float-sm-end listjs-pagination">
+      
+                      <div class="paginate" *ngIf="filteredReferralList.length!=0">
+                          
+                          <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                            <div class="paginate-page " (click)="setPage(pager.page-1, $event)"><span>◄</span></div>
+                            <div class="paginate-page {{ page==pager.page ? 'current' : '' }}" (click)="setPage(page, $event)" *ngFor="let page of pager.limited_page" ><span>{{page}}</span></div>
+                            <div class="paginate-page " (click)="setPage(pager.page+1, $event)"><span>►</span></div>
+                          </div>
+                      </div>
+
+                      </div>
+                  </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<ng-template #referralModal let-modal>
+<div class="modal-body no-getch">
+  
+  <div class="mt-1 mb-3">
+    <span class="fs-24 text-primary fw-bold">
+      {{ ( referralData.id ? ('REFERRAL.text21' | translate) : ('REFERRAL.text2' | translate) ) }}<br>
+    </span> 
+  </div>
+
+  <div>
+    <form action="javascript:void(0);">
+      <div class="row g-3">
+        <div class="col-xxl-12">
+          <form class="form-group form-dark">
+
+            <div class="mb-3" *ngIf="referralData.id">
+              <label class="form-label">{{ 'REFERRAL.text23' | translate }}</label>
+              <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="referralData.code" [ngModelOptions]="{standalone:true}" [disabled]="true">
+              </div>  
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">{{ 'REFERRAL.text4' | translate }}</label>
+              <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="referralData.name" [ngModelOptions]="{standalone:true}">
+              </div>  
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">{{ 'REFERRAL.text14' | translate }}</label>
+              <div class="input-group flatpickr" id="mypicker" mwlFlatpickr  [wrap]="true" #validUntilPicker>
+                <input class="form-control" data-input id="validUntilPicker" type="text" placeholder="00/00/0000" [(ngModel)]="referralData.expiryDate" [ngModelOptions]="{standalone:true}" [disabled]="referralData.noValidDate">
+                <i class="bx bx-calendar date-icon"  title="toggle" (click)="openPicker()"></i>
+              </div>  
+
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="referralData.noValidDate" [ngModelOptions]="{standalone: true}" (click)="referralData.expiryDate='';">
+                <label class="form-check-label mx-2">
+                  {{ 'REFERRAL.text15' | translate }}
+                </label>
+              </div> 
+
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">{{ 'REFERRAL.text16' | translate }}</label>
+              <div class="input-group">
+                <input type="tel" class="form-control"
+                (keypress)="numbersOnly($event)"
+                [(ngModel)]="referralData.usageCount" [ngModelOptions]="{standalone: true}" [disabled]="referralData.unrestricted"
+                onPaste="return false" onDrop = "return false" autocomplete=off >
+              </div>  
+
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="referralData.unrestricted" [ngModelOptions]="{standalone: true}" (click)="referralData.usageCount='';">
+                <label class="form-check-label mx-2">
+                  {{ 'REFERRAL.text17' | translate }}
+                </label>
+              </div> 
+
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="referralData.optIn" [ngModelOptions]="{standalone:true}">
+                <label class="form-check-label mx-2" >
+                  {{ 'REFERRAL.text18' | translate }}
+                </label>
+              </div>  
+            </div>
+          </form>
+        </div>
+        
+        <div class="col-6 d-grid gap-2 mx-auto">
+          <button type="button" class="btn btn-clear font-size-12" (click)="modal.close()">
+            {{ 'REFERRAL.text19' | translate }}
+          </button>
+        </div>
+        <div class="col-6 d-grid gap-2 mx-auto">
+          <button *ngIf="!referralData.id" type="button" class="btn btn-primary font-size-12" 
+          [disabled]="!referralData.name || ( referralData.noValidDate ? '' : !referralData.expiryDate ) || ( referralData.unrestricted ? '' : !referralData.usageCount ) || ( referralData.source == '0' ? !referralData.sourceOthers : '' )"
+          (click)="confirmCreateReferral()">
+          {{ 'REFERRAL.text20' | translate }}
+          </button>
+
+          <button *ngIf="referralData.id" type="button" class="btn btn-primary font-size-12" 
+          [disabled]="!referralData.name || ( referralData.noValidDate ? '' : !referralData.expiryDate ) || ( referralData.unrestricted ? '' : !referralData.usageCount )"
+          (click)="confirmUpdateReferral()">
+            {{ 'REFERRAL.text22' | translate }}
+          </button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>
+</ng-template>
+
+<ng-template #deleteConfirmModal id="deleteConfirmModal" role="document" let-modal>
+<div class="modal-body">
+    <div class="mt-1 mb-3">
+        <span class="fs-24 text-danger fw-bold">{{ 'REFERRAL.text35' | translate }}<br></span> 
+        <p class="mt-3">
+          {{ 'REFERRAL.text36' | translate }}: <b>{{ referralData.code }} - {{ referralData.name }}</b>
+        </p>
+    </div>
+</div>
+<div class="modal-footer">
+  <div class="row w-100">
+    <div class="col">
+      <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn w-50 btn-clear" (click)="modal.close('Close click')">{{ 'REFERRAL.text19' | translate }}</button>
+        <button type="submit" class="btn w-50 btn-danger" (click)="confirmDeleteReferral()">{{ 'REFERRAL.text37' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+</ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

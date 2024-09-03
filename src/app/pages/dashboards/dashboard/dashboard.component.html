@@ -1,0 +1,177 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="{{ 'DASHBOARD.text1' | translate }}" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row" *ngIf="access.permissions['Dashboard'] && access.permissions['Dashboard'].includes('R')">
+    <div class="col">
+
+        <div class="h-100">
+            <div class="row mb-3 pb-1">
+                <div class="col-12">
+                    <div class="d-flex align-items-lg-center flex-lg-row flex-column">
+                        <div class="flex-grow-1">
+                            <h4 class="fs-18 mb-1">{{ 'DASHBOARD.text2' | translate }}, {{ userInfo.firstName + ' ' + userInfo.lastName }}!</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="fs-12 text-gray">{{ 'DASHBOARD.text3' | translate }}</div>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex justify-content-end">
+                                        <img src="./assets/images/users-primary.png">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col" *ngIf="!loader.users">
+                                    <div class="fs-24 fw-bold">{{ userList ? userList.length : '0' }}</div>
+                                </div>
+                                <div class="col" *ngIf="loader.users">
+                                    <div class="spinner-border text-success text-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="fs-12 text-gray">{{ 'DASHBOARD.text4' | translate }}</div>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex justify-content-end">
+                                        <img src="./assets/images/shopping-bag-primary.png">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col" *ngIf="!loader.merchants">
+                                    <div class="fs-24 fw-bold">{{ merchantList ? merchantList.length : '0' }}</div>
+                                </div>
+                                <div class="col" *ngIf="loader.merchants">
+                                    <div class="spinner-border text-success text-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="fs-12 text-gray">{{ 'DASHBOARD.text5' | translate }}</div>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex justify-content-end">
+                                        <img src="./assets/images/users-primary.png">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col" *ngIf="!loader.customers">
+                                    <div class="fs-24 fw-bold">{{ customerList ? customerList.length : '0' }}</div>
+                                </div>
+                                <div class="col" *ngIf="loader.customers">
+                                    <div class="spinner-border text-success text-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="fs-12 text-gray">Expired Offers</div>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex justify-content-end">
+                                        <img src="./assets/images/percent-primary.png">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    <div class="fs-24 fw-bold">1240</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="row">
+                <div class="col-3">
+                    <div class="card card-size">
+                        <div class="card-header">
+                            <h4 class="card-title mb-0">Users (last week)</h4>
+                        </div>
+              
+                        <div class="card-body">
+                            <apx-chart class="text-dark" [series]="simplePieChart.series" [chart]="simplePieChart.chart"
+                            [labels]="simplePieChart.labels" [legend]="simplePieChart.legend"
+                            [dataLabels]="simplePieChart.dataLabels" [responsive]="simplePieChart.responsive"
+                            [colors]="simplePieChart.colors"></apx-chart>
+                          </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card card-size">
+                        <div class="card-header">
+                            <h4 class="card-title mb-0">Offers (last week)</h4>
+                        </div>
+              
+                        <div class="card-body">
+                          <apx-chart class="text-dark" [series]="simplePieChart.series" [chart]="simplePieChart.chart"
+                          [labels]="simplePieChart.labels" [legend]="simplePieChart.legend"
+                          [dataLabels]="simplePieChart.dataLabels" [responsive]="simplePieChart.responsive"
+                          [colors]="simplePieChart.colors"></apx-chart>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Merchants</h4>
+                            <div class="d-flex gap-1">
+                                <button type="button" class="btn btn-sm btn-ghost-dark table-filter">
+                                    ALL
+                                </button>
+                                <button type="button" class="btn btn-sm btn-sm btn-ghost-dark table-filter">
+                                    1M
+                                </button>
+                                <button type="button" class="btn btn-sm btn-sm btn-ghost-dark table-filter">
+                                    6M
+                                </button>
+                                <button type="button" class="btn btn-sm btn-sm btn-ghost-dark table-filter">
+                                    1Y
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0 pb-2">
+                            <div class="w-100">
+                                <apx-chart [series]="distributedColumnChart.series" [chart]="distributedColumnChart.chart"
+                                [dataLabels]="distributedColumnChart.dataLabels" [plotOptions]="distributedColumnChart.plotOptions"
+                                [yaxis]="distributedColumnChart.yaxis" [xaxis]="distributedColumnChart.xaxis"
+                                [legend]="distributedColumnChart.legend" [colors]="distributedColumnChart.colors"
+                                [grid]="distributedColumnChart.grid"></apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+    </div> 
+
+</div>

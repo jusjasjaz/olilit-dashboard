@@ -1,0 +1,612 @@
+<app-breadcrumbs title="{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text1' | translate }}" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+ <div class="user-profile mx-n4 mt-n4 p-4">
+    <div class="row">
+        <div class="col">
+            <div class="d-flex">
+                <img class="profile-logo" src="./assets/user-profile-default.png">
+                <div class="ms-4 mt-2">
+                    <div class="text-white fs-20">{{ customer_details.FirstName }} {{ customer_details.LastName }} 
+                    </div>
+                    <div class="text-white mt-1"><i class="ri-mail-line mail-icon"></i> <span class="">{{ customer_details.Email }}</span></div>
+                    <div class="text-white mt-2"><i class="ri-smartphone-line phone-icon"></i><span class="">{{ customer_details.MobileNumber }}</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 text-right">
+            <button class="btn btn-clear btn-sm back-button mb-2" (click)="backToCustomerList()">
+                <i class="ri-arrow-left-line text-white fs-15"></i> 
+                <label class="text-white go-back-label">{{ 'CUSTOMERS.CUSTOMER_DETAILS.text4' | translate }}</label>
+            </button>
+        </div>
+    </div>
+    <div class="">
+        
+    </div>
+    <!-- TABS LINKS -->
+    <ul ngbNav #nav="ngbNav" [activeId]="(activeId == '1' ? 1 : (activeId == '2' ? 2 : 3))" class="mt-3 nav-pills">
+        <li [ngbNavItem]="1" *ngIf="access.permissions['Account Information'] && access.permissions['Account Information'].includes('R')">
+            <a ngbNavLink>
+                <span class="d-sm-block text-white">{{ 'CUSTOMERS.CUSTOMER_DETAILS.text1' | translate }}</span>
+            </a>
+            <ng-template ngbNavContent>
+                <ng-template [ngTemplateOutlet]="accountInfo"></ng-template>
+            </ng-template>
+        </li>
+      <li [ngbNavItem]="2" *ngIf="access.permissions['Transaction History'] && access.permissions['Transaction History'].includes('R')">
+            <a ngbNavLink (click)="load_customer_transactions()">
+                <span class="d-sm-block text-white">{{ 'CUSTOMERS.CUSTOMER_DETAILS.text2' | translate }}</span>
+            </a>
+            <ng-template ngbNavContent>
+                <ng-template [ngTemplateOutlet]="personalInfo"></ng-template>
+            </ng-template>
+     </li>
+     <li [ngbNavItem]="3" *ngIf="access.permissions['Activity Logs'] && access.permissions['Activity Logs'].includes('R')">
+        <a ngbNavLink (click)="load_customer_activity()">
+            <span class="d-sm-block text-white">{{ 'CUSTOMERS.CUSTOMER_DETAILS.text3' | translate }}</span>
+        </a>
+        <ng-template ngbNavContent>
+            <ng-template [ngTemplateOutlet]="activitylogs"></ng-template>
+        </ng-template>
+ </li>
+    </ul>
+ </div>
+<div class="tab-content  text-muted">
+    <div [ngbNavOutlet]="nav"></div>
+</div>
+
+<!-- TABS CONTENT -->
+ <ng-template #accountInfo>
+    <div class="row mt-4">
+    <div class="col-7">
+        <div class="card">
+            <div class="card-header">
+                <div class="fs-14">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text1' | translate }}</div>
+            </div>
+            <div class="card-body">
+                <div class="row info-section fs-12">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text2' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.FirstName }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text28' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.MiddleName }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text3' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.LastName }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+                
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text23' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.MarriedName }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text24' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.SecondLastName }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text4' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.DateOfBirth }}</div>
+                    </div>
+                   
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-5">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text27' | translate }}</div>
+                    </div>
+                    <div class="col d-flex">
+                        <div class="">{{ customer_details.Id }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text5' | translate }}</div>
+                    </div>
+                    <div class="col d-flex">
+                        <div class="">{{ customer_details.MobileNumber }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text6' | translate }}</div>
+                    </div>
+                    <div class="col d-flex">
+                        <div class="">{{ customer_details.Email }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-5">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text20' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.Address1 }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text21' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.Address2 }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text22' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.Address3 }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text9' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.City }}</div>
+                    </div>
+                    <div class="col text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text10' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.State }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text29' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.Country }}</div>
+                    </div>
+                    <div class="col text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text11' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.Zip }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <!-- <div class="row info-section fs-12 mt-3">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text11' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.Zip }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div> -->
+            </div>
+        </div>
+
+        <!-- <div class="card">
+            <div class="card-header">
+                {{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text19' | translate }}
+            </div>
+            <div class="card-body">
+                <div class="row info-section fs-12">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text20' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.Occupation ? customer_details.Occupation.Address1 : '' }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text21' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.Occupation ? customer_details.Occupation.Address2 : '' }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-3 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text22' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.Occupation ? customer_details.Occupation.Address3 : '' }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text9' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.Occupation ? customer_details.Occupation.City : '' }}</div>
+                    </div>
+                    <div class="col text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text10' | translate }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="">{{ customer_details.Occupation ? customer_details.Occupation.State : '' }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+            </div>
+        </div> -->
+
+    </div>
+
+    <div class="col-5">
+        
+        <div class="card" *ngIf="customer_details.CardState == 'Pending' && (access.permissions['Account Information'] && access.permissions['Account Information'].includes('P'))">
+            <div class="card-body">
+                <div class="row info-section fs-12 " >
+                    <!-- <button type="button" class="btn btn-sm btn-primary waves-effect waves-light text-uppercase fs-10" (click)="confirmCardApprove(approveCardModal)" [disabled]="customer_details.KycStatus.toLowerCase() == 'pending'">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text17' | translate }}</button> -->
+                    <button type="button" class="btn btn-sm btn-primary waves-effect waves-light text-uppercase fs-10" (click)="confirmCardApprove(approveCardModal)">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text32' | translate }}</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-4 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text18' | translate }}</div>
+                    </div>
+                    <div class="col d-flex">
+                        <div class="">{{ customer_details.KycStatus }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+            </div>
+        </div>
+
+        <div class="card" *ngFor="let d of document">
+            <div class="card-header">
+                <div class="fs-14">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text12' | translate }}</div>
+            </div>
+            <div class="card-body">
+                <div class="row info-section fs-12">
+                    <div class="col-4 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text13' | translate }}</div>
+                    </div>
+                    <div class="col d-flex">
+                        <div class="">{{ d.DocumentName }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-4 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text15' | translate }}</div>
+                    </div>
+                    <div class="col d-flex">
+                        <div class="">{{ d.ExpiryDate }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-4 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text30' | translate }}</div>
+                    </div>
+                    <div class="col d-flex">
+                        <div class="">{{ d.CardNumber }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-4 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text31' | translate }}</div>
+                    </div>
+                    <div class="col d-flex">
+                        <div class="">{{ d.AccountNumber }}</div>
+                    </div>
+                </div>
+                <div class="list-border"></div>
+
+                <div class="row info-section fs-12 mt-3">
+                    <div class="col-4 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text25' | translate }}</div>
+                    </div>
+                    <div class="col d-flex">
+                        <div class="">{{ d.ValidDate }}</div>
+                    </div>
+                </div>
+                <!-- <div class="list-border"></div> -->
+
+                <!-- <div class="row info-section-id fs-12 mt-3 id-m-container">
+                    <div class="col-4 text-uppercase text-gray">
+                        <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text16' | translate }}</div>
+                    </div>
+                    <div class="col d-flex id-s-container">
+                        <div (click)="previewImage((d.URL ? d.URL : ''), imageModal)">
+                            <img class="id-image" [src]="( d.URL ? d.URL : './assets/icon-user-id.png' )">
+                        </div>
+                    </div>
+                </div> -->
+                <div class="list-border"></div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+</ng-template>
+
+<ng-template #personalInfo>
+    <div class="card mt-4">
+        <div class="card-body account-credentials">
+            <div class="row fs-14 text-uppercase text-dark">
+                <div class="col-5">
+                    <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.TRANSACTION_HISTORY.text1' | translate }}</div>
+                    <div class="mt-2 fs-21">{{ customer_details.AccountNumber }} 
+                        <!-- <button class="btn bg-transparent btn-sm"><img src="./assets/icon-view-primary.svg" width="20"> </button> -->
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.TRANSACTION_HISTORY.text2' | translate }}</div>
+                    <div class="mt-1 fs-21">{{ customer_details.Balance ? ( customer_details.Balance | currency ) : '$ 0.00' }}</div>
+                </div>
+                <div class="col-3">
+                    <div class="">{{ 'CUSTOMERS.CUSTOMER_DETAILS.TRANSACTION_HISTORY.text3' | translate }}</div>
+                    <div class="mt-1 fs-21 {{ getColor(customer_details.CardStatus) }}">{{ customer_details.CardStatus }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">{{ 'CUSTOMERS.CUSTOMER_DETAILS.text2' | translate }}</h4>
+                </div><!-- end card header -->
+      
+                <div class="card-body">
+                    <div>
+                        <div class="row g-4 mb-4">
+                            <div class="col-sm-3">
+                                <div class="d-flex gap-1" *ngIf="transaction_selectValue.length > 0">
+                                  <ng-select placeholder="{{ 'OTHERS.text1' | translate }}" [items]="transaction_selectValue" bindLabel="name" [(ngModel)]="transaction_filter_column" class="w-100"></ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="search-box">
+                                    <input type="text" class="form-control search w-100" placeholder="{{ 'OTHERS.text2' | translate }}..." [(ngModel)]="transaction_filter_keyword" >
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-primary f-right w-100" (click)="load_customer_transactions(1)" [disabled]="!transaction_filter_keyword">{{ 'CUSTOMERS.CUSTOMER_DETAILS.TRANSACTION_HISTORY.text10' | translate }}</button>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-danger f-right w-100" (click)="resetTransction()">{{ 'CUSTOMERS.CUSTOMER_DETAILS.TRANSACTION_HISTORY.text11' | translate }}</button>
+                            </div>
+                        </div>
+      
+                        <div class="table-responsive table-card table-striped "> <!-- mt-3 mb-1 -->
+                            <table class="table table-striped">
+                              <thead>
+                              <tr class="tr-section text-primary">
+                              <th class="" data-sort="tran_created">{{ 'CUSTOMERS.CUSTOMER_DETAILS.TRANSACTION_HISTORY.text4' | translate }}</th>
+                              <th class="" data-sort="tran_id">{{ 'CUSTOMERS.CUSTOMER_DETAILS.TRANSACTION_HISTORY.text5' | translate }}</th>
+                              <th class="" data-sort="transaction_type">{{ 'CUSTOMERS.CUSTOMER_DETAILS.TRANSACTION_HISTORY.text6' | translate }}</th>
+                              <th class="" data-sort="description">{{ 'CUSTOMERS.CUSTOMER_DETAILS.TRANSACTION_HISTORY.text7' | translate }}</th>
+                              <th class="" data-sort="amount">{{ 'CUSTOMERS.CUSTOMER_DETAILS.TRANSACTION_HISTORY.text8' | translate }}</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr *ngFor="let data of filtered_transaction_list" [hidden]="data.key > pager.end || data.key < pager.start">
+                                <td>{{ data.tran_created }}</td>
+                                <td>{{ data.tran_ref_id }}</td>
+                                <td>{{ data.transaction_type }}</td>
+                                <td>{{ data.transaction_desc }}</td>
+                                <td class="text-right" [class]="data.color">{{ data.prefix }} {{ data.amount | currency }}</td>
+                              </tr>
+                              </tbody>
+                            </table>
+                        </div>
+      
+                        <div class="row justify-content-md-between align-items-md-center">
+                          <div class="col col-sm-6">
+                              <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                                  <!-- <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{filtered_transaction_list.length}}</span> {{ 'OTHERS.text6' | translate }}</div> -->
+                              </div>
+                          </div>
+
+                          <div class="col col-sm-6">
+                              <div class="text-sm-right float-sm-end listjs-pagination">
+                                <!-- <ngb-pagination
+                                [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+                              </ngb-pagination> -->
+
+                                <div class="paginate" *ngIf="filtered_transaction_list.length!=0">
+                                    <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                                    <div class="paginate-page " (click)="setPage_transaction(pager.page-1, $event, 1)"><span>◄</span></div>
+                                    <div class="paginate-page {{ page==pager.page ? 'current' : '' }}" (click)="setPage_transaction(page, $event, 1)" *ngFor="let page of pager.limited_page" ><span>{{page}}</span></div>
+                                    <div class="paginate-page " (click)="setPage_transaction(pager.page+1, $event, 1)"><span>►</span></div>
+                                    </div>
+                                </div>
+
+                              </div>
+                          </div>
+
+                        </div>
+
+                    </div>
+                </div><!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end col -->
+      </div>
+</ng-template>
+
+<ng-template #activitylogs>
+    <div class="row mt-4">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">{{ 'CUSTOMERS.CUSTOMER_DETAILS.text3' | translate }}</h4>
+                </div><!-- end card header -->
+      
+                <div class="card-body">
+                    <div>
+                        <div class="row g-4 mb-4">
+                            <div class="col-sm-auto">
+                                <div class="d-flex gap-1" *ngIf="activity_selectValue.length > 0">
+                                  <ng-select placeholder="{{ 'OTHERS.text1' | translate }}" [items]="activity_selectValue" bindLabel="name" [multiple]="true" [(ngModel)]="activity_filter_column" (change)="filter_activity()"></ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="d-flex justify-content-sm-end">
+                                    <div class="search-box ms-2">
+                                        <input type="text" class="form-control search" placeholder="{{ 'OTHERS.text2' | translate }}..." [(ngModel)]="activity_filter_keyword" (keyup)="filter_activity()">
+                                        <i class="ri-search-line search-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+      
+                        <div class="table-responsive table-card table-striped "> <!-- mt-3 mb-1 -->
+                            <table class="table table-striped">
+                              <thead>
+                              <tr class="tr-section text-primary">
+                              <th>{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACTIVITY_LOGS.text1' | translate }}</th>
+                              <th>{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACTIVITY_LOGS.text2' | translate }}</th>
+                              <th>{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACTIVITY_LOGS.text3' | translate }}</th>
+                              <th>{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACTIVITY_LOGS.text4' | translate }}</th>
+                              <th>{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACTIVITY_LOGS.text6' | translate }}</th>
+                              <th>{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACTIVITY_LOGS.text5' | translate }}</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr *ngFor="let data of filtered_activity_list" [hidden]="data.key > pager.end || data.key < pager.start">
+                                <td>{{ data.DateTime }}</td>
+                                <td>{{ data.ActorFullName }}</td>
+                                <td>{{ data.ActivityType }}</td>
+                                <td>{{ data.ActivityDescription }}</td>
+                                <td>{{ data.ParamValue }}</td>
+                                <td class="{{ getColor((data.Status ? data.Status : '')) }}">{{ data.Status }}</td>
+                              </tr>
+                              </tbody>
+                            </table>
+                        </div>
+      
+                        <div class="row justify-content-md-between align-items-md-center">
+                          <div class="col col-sm-6">
+                              <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                                <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span> {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' | translate }} <span>{{filtered_activity_list.length}}</span> {{ 'OTHERS.text6' | translate }}</div>
+                              </div>
+                          </div>
+
+                          <div class="col col-sm-6">
+                              <div class="text-sm-right float-sm-end listjs-pagination">
+                                <!-- <ngb-pagination
+                                [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+                              </ngb-pagination> -->
+
+                              <div class="paginate" *ngIf="filtered_activity_list.length!=0">
+                                
+                                <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                                  <div class="paginate-page " (click)="setPage_activity(pager.page-1, $event)"><span>◄</span></div>
+                                  <div class="paginate-page {{ page==pager.page ? 'current' : '' }}" (click)="setPage_activity(page, $event)" *ngFor="let page of pager.limited_page" ><span>{{page}}</span></div>
+                                  <div class="paginate-page " (click)="setPage_activity(pager.page+1, $event)"><span>►</span></div>
+                                </div>
+                            </div>
+
+                              </div>
+                          </div>
+
+                        </div>
+                    </div>
+                </div><!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end col -->
+      </div>
+</ng-template>
+
+<ng-template #imageModal role="document" let-modal>
+    <div class="modal-header bg-light p-3">
+        <h5 class="modal-title" id="exampleModalLabel">{{ 'CUSTOMERS.CUSTOMER_DETAILS.ACCOUNT_INFORMATION.text26' | translate }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <img class="preview-img" [src]="previewURL">
+    </div>
+</ng-template>
+
+<ng-template #approveCardModal id="approveCardModal" role="document" let-modal>
+    <div class="modal-body">
+        <div class="mt-1 mb-3">
+            <span class="fs-24 text-danger fw-bold">
+                {{ 'CUSTOMERS.CUSTOMER_DETAILS.APPROVE_CARD_MODAL.text1' | translate }}
+                <br>
+            </span> 
+            <p class="mt-3">
+                {{ 'CUSTOMERS.CUSTOMER_DETAILS.APPROVE_CARD_MODAL.text2' | translate }} <b>{{ customer_details.FirstName }} {{ customer_details.LastName }}'s</b> {{ 'CUSTOMERS.CUSTOMER_DETAILS.APPROVE_CARD_MODAL.text3' | translate }}?
+            </p>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <div class="row w-100">
+        <div class="col">
+          <div class="hstack gap-2 justify-content-end">
+            <button type="button" class="btn w-50 btn-clear" (click)="modal.close('Close click')">{{ 'CUSTOMERS.CUSTOMER_DETAILS.APPROVE_CARD_MODAL.text4' | translate }}</button>
+            <button type="submit" class="btn w-50 btn-success" (click)="approveCard()">{{ 'CUSTOMERS.CUSTOMER_DETAILS.APPROVE_CARD_MODAL.text5' | translate }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

@@ -1,0 +1,107 @@
+/*
+Template Name: Velzon - Admin & Dashboard Template
+Author: Themesbrand
+Website: https://themesbrand.com/
+Contact: support@themesbrand.com
+File: Custom Css File
+*/
+.card-body {
+  padding-right: 2rem !important;
+  padding-left: 2rem !important;
+}
+
+:root {
+  --vz-vertical-menu-item-color-dark: rgba(255, 255, 255, 0.5);
+}
+
+.tr-section {
+  color: $primary !important;
+  background: $primary-color-100;
+  border-bottom: 1px solid #e0dede;
+  th {
+    padding: 15px;
+  }
+  >:not(:last-child) {
+    border-right: 1px solid #e0dede;
+  }
+}
+
+.text-active {
+  color: $success;
+}
+
+.text-inactive {
+  color: $danger;
+}
+
+.no-padding {
+  padding: 0!important;
+}
+
+.env-tag {
+  float: right;
+  max-width: 70px;
+  min-width: 70px;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: $primary;
+  color: #fff;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 1rem 1rem;
+}
+
+.paginate{
+  padding: 1.5rem 1em !important;
+}
+
+.paginate {
+  padding: 1.5rem 0;
+  font-size: 14px;
+  color: lightgray;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+
+  .paginate-pages {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .paginate-page {
+    color: lightgray;
+    cursor: pointer;
+
+    &.current {
+      color: $primary;
+    }
+
+    &:not(:last-child) {
+      margin-right: 1.25rem;
+    }
+  }
+}
+
+.add-btn-width{
+  width: 150px;
+}
+
+.go-back-label {
+  vertical-align: middle;
+  margin-left:5px;
+  cursor:pointer;
+}
+
+.text-right{
+  text-align: right;
+}
+
+.text-center{
+  text-align: center;
+}

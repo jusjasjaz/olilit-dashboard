@@ -1,0 +1,172 @@
+<app-breadcrumbs title="{{ 'LIMIT_CONFIGURATION.text1' | translate }}" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="row mb-2 mt-3">
+    <div class="col-lg-6 fw-bold fs-20">{{ 'LIMIT_CONFIGURATION.text1' | translate }}</div>
+    <div class="col-lg-6"
+        *ngIf="access.permissions['Limit Configuration'] && access.permissions['Limit Configuration'].includes('A')">
+        <div class="d-flex justify-content-sm-end">
+            <button type="button" class="btn btn-primary " (click)="openModal(content)">
+                {{ 'LIMIT_CONFIGURATION.text12' | translate }}
+            </button>
+        </div>
+    </div>
+</div>
+<div class="row"
+    *ngIf="access.permissions['Limit Configuration'] && access.permissions['Limit Configuration'].includes('R')">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="mt-3">
+                    <div class="table-responsive table-card mt-1 mb-1">
+                        <table class="table ">
+                            <thead>
+                                <tr class="tr-section text-primary">
+                                    <th>{{ 'LIMIT_CONFIGURATION.text2' | translate }}</th>
+                                    <th>{{ 'LIMIT_CONFIGURATION.text3' | translate }}</th>
+                                    <th class="text-right">{{ 'LIMIT_CONFIGURATION.text4' | translate }}</th>
+                                    <th class="text-right">{{ 'LIMIT_CONFIGURATION.text5' | translate }}</th>
+                                    <th
+                                        *ngIf="access.permissions['Limit Configuration'] && access.permissions['Limit Configuration'].includes('E')">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr *ngFor="let data of filtered_limitList"
+                                    [hidden]="data.key > pager.end || data.key < pager.start">
+                                    <td>{{ ( data.Id ? data.Id : '-' ) }}</td>
+                                    <td>{{ data.LimitName }}</td>
+                                    <td class="text-right" *ngIf="data.IsCurrency == '1'">{{data.LimitAmount | currency
+                                        }}</td>
+                                    <td class="text-right" *ngIf="data.IsCurrency == '0'">{{data.LimitAmount}}</td>
+                                    <td class="text-right">
+                                        {{
+                                        ( data.ResetDay ?
+                                        ( data.ResetDay == 'lastDayOfTheMonth' ? 'Last Day of Month ('+ lastDay +')' : (
+                                        data.ResetDay != 'never' ? ( 'Specific Day ' + '(' + data.ResetDay + ')' ) :
+                                        'Never' ) ) : '-'
+                                        )
+                                        }}
+                                    </td>
+                                    <td width="5%" class="text-center"
+                                        *ngIf="access.permissions['Limit Configuration'] && access.permissions['Limit Configuration'].includes('E')">
+                                        <button class="btn bg-transparent btn-sm" (click)="openModal(content, data)">
+                                            <img src="./assets/icon-edit.png" width="16"> </button></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row justify-content-md-between align-items-md-center">
+                        <div class="col col-sm-6">
+                            <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                                <div class="paginate-info">{{ 'OTHERS.text3' | translate }} <span>{{pager.start}}</span>
+                                    {{ 'OTHERS.text4' | translate }} <span>{{pager.end}}</span> {{ 'OTHERS.text5' |
+                                    translate }} <span>{{filtered_limitList.length}}</span> {{ 'OTHERS.text6' |
+                                    translate }}</div>
+                            </div>
+                        </div>
+                        <div class="col col-sm-6">
+                            <div class="text-sm-right float-sm-end listjs-pagination">
+
+                                <div class="paginate" *ngIf="filtered_limitList.length!=0">
+
+                                    <div class="paginate-pages" *ngIf="pager.pages.length > 1">
+                                        <div class="paginate-page " (click)="setPage(pager.page-1, $event)">
+                                            <span>◄</span></div>
+                                        <div class="paginate-page {{ page==pager.page ? 'current' : '' }}"
+                                            (click)="setPage(page, $event)" *ngFor="let page of pager.limited_page">
+                                            <span>{{page}}</span></div>
+                                        <div class="paginate-page " (click)="setPage(pager.page+1, $event)">
+                                            <span>►</span></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div><!-- end card -->
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end col -->
+</div>
+<!-- end row -->
+
+<ng-template #content role="document" let-modal>
+    <div class="modal-header bg-light p-3">
+        <h5 class="modal-title">{{ active.id ? ('LIMIT_CONFIGURATION.text6' | translate) : ('LIMIT_CONFIGURATION.text12'
+            | translate) }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+            (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form>
+        <div class="modal-body">
+            <div class="mb-2">
+                <label class="form-label">{{ 'LIMIT_CONFIGURATION.text3' | translate }}</label>
+                <input type="text" class="form-control" autocomplete=off [(ngModel)]="active.name"
+                    [ngModelOptions]="{standalone:true}" />
+            </div>
+            <div class="mb-2">
+                <div class="d-flex gap-2" >
+                    <label class="form-label ml-2">{{ 'LIMIT_CONFIGURATION.text4' | translate }}</label>
+                    (
+                    <input class="form-check-input" type="checkbox" (change)="isCur(active.is_currency)"
+                        [checked]="active.is_currency" [(ngModel)]="active.is_currency"
+                        [ngModelOptions]="{standalone: true}">
+                    <label class="form-check-label mx-2">
+                        {{ 'LIMIT_CONFIGURATION.text13' | translate }}
+                    </label>
+                    )
+                </div>
+                <input type="tel" class="form-control" (keypress)="numbersOnly($event)" (keyup)="addDolar($event)"
+                    maxlength="12" onPaste="return false" onDrop="return false" autocomplete=off
+                    [(ngModel)]="active.amount" [ngModelOptions]="{standalone:true}" />
+            </div>
+            <div class="mb-2">
+                <label class="form-label">{{ 'LIMIT_CONFIGURATION.text5' | translate }}</label>
+
+                <div class="d-flex gap-2">
+                    <div (click)="resetDayVal('lastDayOfTheMonth')">
+                        <input type="radio" class="btn-check" id="ldm"
+                            [checked]="active.reset_day == 'lastDayOfTheMonth'" name="test">
+                        <label class="btn btn-outline-info" for="ldm">{{ 'LIMIT_CONFIGURATION.text9' | translate
+                            }}</label>
+                    </div>
+                    <div (click)="resetDayVal('')">
+                        <input type="radio" class="btn-check" id="sd"
+                            [checked]="active.reset_day != 'lastDayOfTheMonth' && active.reset_day != 'never'"
+                            name="test">
+                        <label class="btn btn-outline-info" for="sd">{{ 'LIMIT_CONFIGURATION.text10' | translate
+                            }}</label>
+                    </div>
+                    <div (click)="resetDayVal('never')">
+                        <input type="radio" class="btn-check" id="nev" [checked]="active.reset_day == 'never'"
+                            name="test">
+                        <label class="btn btn-outline-info" for="nev">{{ 'LIMIT_CONFIGURATION.text11' | translate
+                            }}</label>
+                    </div>
+                </div>
+                <input [hidden]="active.reset_day == 'lastDayOfTheMonth' || active.reset_day == 'never'" type="tel"
+                    class="form-control" (keypress)="numbersOnly($event)" maxlength="12" onPaste="return false"
+                    onDrop="return false" autocomplete=off [(ngModel)]="active.reset_day"
+                    [ngModelOptions]="{standalone:true}" />
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <div class="hstack gap-2 justify-content-end">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal"
+                    (click)="modal.close('Close click')">{{ 'LIMIT_CONFIGURATION.text7' | translate }}</button>
+                <button type="submit" class="btn w-50 btn-primary"
+                    [disabled]="!active.name || !active.amount || !active.reset_day" (click)="process_fee()">{{
+                    'LIMIT_CONFIGURATION.text8' | translate }}</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
