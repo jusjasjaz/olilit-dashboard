@@ -6,6 +6,7 @@ import { RegisterComponent } from "./register/register.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterMerchantComponent } from './auth/register-merchant/register-merchant.component';
 import { SignupComponent } from './signup/signup.component';
+import { SignUpStepOneComponent } from './signup-completion/sign-up-step-one/sign-up-step-one.component';
 
 const routes: Routes = [
   {
@@ -50,6 +51,10 @@ const routes: Routes = [
   {
     path: "sign-up",
     component: SignupComponent
+  },
+  {
+    path: "sign-up-completion-step-one",
+    component: SignUpStepOneComponent
   },
 ];
 

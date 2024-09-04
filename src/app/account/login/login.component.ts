@@ -187,7 +187,6 @@ export class LoginComponent implements OnInit {
   }
 
   signUp() {
-    // Directly navigate to the dashboard without any checks or processing
     this.router.navigate(['/auth/sign-up']);
   }
 }
