@@ -7,7 +7,6 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterMerchantComponent } from './auth/register-merchant/register-merchant.component';
 import { SignupComponent } from './signup/signup.component';
 
-
 const routes: Routes = [
   {
     path: 'signin', loadChildren: () => import('./auth/signin/signin.module').then(m => m.SigninModule)
@@ -49,10 +48,9 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: "signup",
+    path: "sign-up",
     component: SignupComponent
-  }
-
+  },
 ];
 
 @NgModule({

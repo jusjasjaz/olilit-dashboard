@@ -16,6 +16,7 @@ import { RegisterMerchantComponent } from './auth/register-merchant/register-mer
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { SignupComponent } from './signup/signup.component';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -26,6 +27,7 @@ export function createTranslateLoader(http: HttpClient): any {
     RegisterComponent,
     LoginComponent,
     RegisterMerchantComponent,
+    SignupComponent,
 
   ],
   imports: [
