@@ -4,3 +4,23 @@
 .f-right{
     float: right;
 }
+
+.left-header-container {
+    float: left;
+    border-radius: 4px;
+    margin: 1rem 1rem;
+}
+.right-header-container {
+    float: right;
+    border-radius: 4px;
+    margin: 1rem 1rem; 
+    z-index: 10;
+
+    .a-link {
+        padding-right: 1rem;
+    }
+}
+
+.footer {
+    padding: 0;
+}

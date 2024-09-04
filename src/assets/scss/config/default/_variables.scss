@@ -9,7 +9,7 @@
 $variable-prefix:             vz-;
 
 // Font Family
-$font-family-primary:                             'Poppins', sans-serif;
+$font-family-primary:                             'Plus Jakarta Sans', sans-serif;
 $font-family-secondary:                           'hkgrotesk', sans-serif;
 
 //
@@ -668,7 +668,7 @@ $border-color:                var(--#{$variable-prefix}border-color);
 // scss-docs-start border-radius-variables
 $border-radius:               .25rem;
 $border-radius-sm:            .2rem;
-$border-radius-lg:            .3rem;
+$border-radius-lg:            .5rem;
 $border-radius-pill:          50rem;
 // scss-docs-end border-radius-variables
 
