@@ -67,7 +67,9 @@
                                     <button class="btn btn-primary btn-md w-40" type="submit">Confirm</button>
                                   </div>
                                   <div class="mt-4 text-center" *ngIf="errorMesage">
-                                      <span class='text-danger'>{{ errorMesage }}</span>
+                                      <span class='text-danger'>Password didn’t match. Please try again.</span>
+                                      <span class='text-danger'>A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required..</span>
+                                      <span class='text-danger'>Invalid Email Address</span>
                                   </div>
 
                               </form>
