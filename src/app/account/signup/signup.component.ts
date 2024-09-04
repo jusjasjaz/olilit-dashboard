@@ -11,23 +11,18 @@ import { TranslateService } from '@ngx-translate/core';
 const { version: portalVersion } = require('../../../../package.json')
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.scss']
 })
-
-/**
- * Login Component
- */
-
-
-export class LoginComponent implements OnInit {
+export class SignupComponent implements OnInit {
 
 
   // Login Form
   loginForm!: FormGroup;
   submitted = false;
-  fieldTextType!: boolean;
+  fieldTextPasswordType!: boolean;
+  fieldTextConfirmType!: boolean;
   error = '';
   returnUrl!: string;
 
@@ -182,12 +177,16 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  toggleFieldTextType() {
-    this.fieldTextType = !this.fieldTextType;
+  togglePassword() {
+    this.fieldTextPasswordType = !this.fieldTextPasswordType;
+  }
+
+  toggleConfirmPassword() {
+    this.fieldTextConfirmType = !this.fieldTextConfirmType;
   }
 
   signUp() {
     // Directly navigate to the dashboard without any checks or processing
-    this.router.navigate(['/signup']);
+    this.router.navigate(['/auth/login']);
   }
 }
