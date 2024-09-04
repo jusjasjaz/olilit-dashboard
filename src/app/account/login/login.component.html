@@ -34,21 +34,22 @@
                                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                                     <div class="mb-3">
                                       <div class="position-relative auth-pass-inputgroup mb-3">
-                                        <input type="email" class="form-control" id="email" formControlName="email"
+                                        <input type="email" class="auth-form-control" id="email" formControlName="email"
                                         [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
                                         placeholder="Enter email" >
                                         <div class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted">
-                                            <i class="mdi mdi-email-outline align-middle"></i>
+                                            <i class="mdi mdi-email-outline align-middle fs-24"></i>
                                         </div>
                                       </div>
                                     </div>
   
                                     <div class="mb-3">
                                         <div class="position-relative auth-pass-inputgroup mb-3">
-                                            <input [type]="fieldTextType ? 'text' : 'password'" class="form-control pe-5" placeholder="Enter password" id="password-input" formControlName="password"
+                                            <input [type]="fieldTextType ? 'text' : 'password'" class="auth-form-control pe-5" placeholder="Enter password" id="password-input" formControlName="password"
                                             [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
-                                            <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="password-addon"><i class="mdi align-middle" [ngClass]="{'mdi-eye-off-outline': !fieldTextType, 'mdi-eye-outline': fieldTextType
-                                            }" (click)="toggleFieldTextType()"></i></button>
+                                            <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="password-addon">
+                                                <i class="mdi align-middle  fs-24" [ngClass]="{'mdi-eye-off-outline': !fieldTextType, 'mdi-eye-outline': fieldTextType}" (click)="toggleFieldTextType()"></i>
+                                            </button>
                                         </div>
                                     </div>
 

@@ -33,31 +33,33 @@
                           <div class="p-2">
                               <form>
                                   <div class="mb-3">
-                                    <input class="form-control pe-5" placeholder="First Name">
+                                    <input class="auth-form-control pe-5" placeholder="First Name">
                                   </div>
                                   <div class="mb-3">
-                                    <input class="form-control pe-5" placeholder="Last Name">
+                                    <input class="auth-form-control pe-5" placeholder="Last Name">
                                   </div>
                                   <div class="mb-3">
-                                    <input class="form-control pe-5" placeholder="Email address">
+                                    <input class="auth-form-control pe-5" placeholder="Email address">
                                   </div>
                                   <div class="mb-3">
-                                    <input class="form-control pe-5" placeholder="Username">
+                                    <input class="auth-form-control pe-5" placeholder="Username">
                                   </div>
                                   <div class="mb-3">
                                       <div class="position-relative auth-pass-inputgroup mb-3">
-                                          <input [type]="fieldTextPasswordType ? 'text' : 'password'" class="form-control pe-5" placeholder="Password" id="password-input" formControlName="password"
+                                          <input [type]="fieldTextPasswordType ? 'text' : 'password'" class="auth-form-control pe-5" placeholder="Password" id="password-input" formControlName="password"
                                           [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
-                                          <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="password-addon"><i class="mdi align-middle" [ngClass]="{'mdi-eye-off-outline': !fieldTextPasswordType, 'mdi-eye-outline': fieldTextPasswordType
-                                          }" (click)="togglePassword()"></i></button>
+                                          <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="password-addon">
+                                            <i class="mdi align-middle fs-24" [ngClass]="{'mdi-eye-off-outline': !fieldTextPasswordType, 'mdi-eye-outline': fieldTextPasswordType}" (click)="togglePassword()"></i>
+                                        </button>
                                       </div>
                                   </div>
                                   <div class="mb-3">
                                     <div class="position-relative auth-pass-inputgroup mb-3">
-                                        <input [type]="fieldTextConfirmType ? 'text' : 'password'" class="form-control pe-5" placeholder="Confirm Password" id="password-input" formControlName="password"
+                                        <input [type]="fieldTextConfirmType ? 'text' : 'password'" class="auth-form-control pe-5" placeholder="Confirm Password" id="password-input" formControlName="password"
                                         [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
-                                        <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="password-addon"><i class="mdi align-middle" [ngClass]="{'mdi-eye-off-outline': !fieldTextConfirmType, 'mdi-eye-outline': fieldTextConfirmType
-                                        }" (click)="toggleConfirmPassword()"></i></button>
+                                        <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="password-addon">
+                                          <i class="mdi align-middle fs-24" [ngClass]="{'mdi-eye-off-outline': !fieldTextConfirmType, 'mdi-eye-outline': fieldTextConfirmType}" (click)="toggleConfirmPassword()"></i>
+                                      </button>
                                     </div>
                                   </div>
                                   <div class="d-flex justify-content-center mt-4">
