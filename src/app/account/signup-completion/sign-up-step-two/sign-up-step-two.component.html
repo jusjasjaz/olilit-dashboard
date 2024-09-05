@@ -44,7 +44,29 @@
                   </div>
                   <div class="col-4">
                     <label class="form-label text-capitalize">Date of Birth</label>
-                    <input class="form-control" placeholder="Phone Number">
+                    <div class="d-flex gap-1">
+                      <ng-select 
+                        placeholder="Months" 
+                        [items]="months" 
+                        bindLabel="name"
+                        [(ngModel)]="selectedMonth" 
+                        [clearable]="false">
+                      </ng-select>
+                      <ng-select 
+                        placeholder="Date" 
+                        [items]="dates" 
+                        bindLabel="name"
+                        [(ngModel)]="selectedDate" 
+                        [clearable]="false">
+                      </ng-select>
+                      <ng-select 
+                        placeholder="Years" 
+                        [items]="years" 
+                        bindLabel="name"
+                        [(ngModel)]="selectedYear" 
+                        [clearable]="false">
+                      </ng-select>
+                    </div>
                   </div>
                 </div>
               </form>

@@ -20,7 +20,7 @@ import { SignupComponent } from './signup/signup.component';
 import { SignUpStepOneComponent } from './signup-completion/sign-up-step-one/sign-up-step-one.component';
 import { SignUpStepTwoComponent } from './signup-completion/sign-up-step-two/sign-up-step-two.component';
 import { SignUpStepThreeComponent } from './signup-completion/sign-up-step-three/sign-up-step-three.component';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
@@ -41,6 +41,7 @@ export function createTranslateLoader(http: HttpClient): any {
     FormsModule,
     AccountRoutingModule,
     SigninModule,
+    NgSelectModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {
