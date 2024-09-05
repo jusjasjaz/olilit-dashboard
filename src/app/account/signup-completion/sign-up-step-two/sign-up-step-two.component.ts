@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-sign-up-step-two',
   templateUrl: './sign-up-step-two.component.html',
@@ -16,7 +16,7 @@ export class SignUpStepTwoComponent implements OnInit {
   selectedState: any = null;
   
   constructor(
-    private router: Router,  private translate: TranslateService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
