@@ -18,6 +18,8 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SignupComponent } from './signup/signup.component';
 import { SignUpStepOneComponent } from './signup-completion/sign-up-step-one/sign-up-step-one.component';
+import { SignUpStepTwoComponent } from './signup-completion/sign-up-step-two/sign-up-step-two.component';
+import { SignUpStepThreeComponent } from './signup-completion/sign-up-step-three/sign-up-step-three.component';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -30,6 +32,8 @@ export function createTranslateLoader(http: HttpClient): any {
     RegisterMerchantComponent,
     SignupComponent,
     SignUpStepOneComponent,
+    SignUpStepTwoComponent,
+    SignUpStepThreeComponent,
   ],
   imports: [
     CommonModule,

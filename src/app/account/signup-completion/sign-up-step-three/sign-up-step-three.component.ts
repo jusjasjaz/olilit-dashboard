@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-sign-up-step-one',
-  templateUrl: './sign-up-step-one.component.html',
-  styleUrls: ['./sign-up-step-one.component.scss']
+  selector: 'app-sign-up-step-three',
+  templateUrl: './sign-up-step-three.component.html',
+  styleUrls: ['./sign-up-step-three.component.scss']
 })
-export class SignUpStepOneComponent implements OnInit {
+export class SignUpStepThreeComponent implements OnInit {
 
   constructor(
     private router: Router,
@@ -20,6 +20,10 @@ export class SignUpStepOneComponent implements OnInit {
   }
 
   next() {
+    this.router.navigate(['']);
+  }
+
+  previous() {
     this.router.navigate(['/auth/sign-up-completion-step-two']);
   }
 

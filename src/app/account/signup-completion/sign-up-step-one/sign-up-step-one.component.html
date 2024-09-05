@@ -18,77 +18,79 @@
                 <h5 class="text-dark fs-20">Sign Up</h5>
               </div>
               <!-- wip for the progress step bar  -->
-              <div class="row justify-content-between mb-3">
-                <div class="col-4">
-                  <label class="form-label text-capitalize">Todays Date</label>
-                  <div class="position-relative">
-                    <input type="date" class="form-control">
-                    <div class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-dark">
-                      <i class="mdi mdi-calendar-outline"></i>
+              <form>
+                <div class="row justify-content-between mb-3">
+                  <div class="col-4">
+                    <label class="form-label text-capitalize">Todays Date</label>
+                    <div class="position-relative">
+                      <input type="date" class="form-control">
+                      <div class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-dark">
+                        <i class="mdi mdi-calendar-outline"></i>
+                      </div>
                     </div>
                   </div>
+                  <div class="col-4">
+                    <label class="form-label text-capitalize">Amount Requested</label>
+                    <input class="form-control">
+                  </div>
                 </div>
-                <div class="col-4">
-                  <label class="form-label text-capitalize">Amount Requested</label>
-                  <input class="form-control">
+                <div class="row mb-3">
+                  <label class="form-label text-capitalize">Full Name</label>
+                  <div class="col-4">
+                    <input class="form-control" placeholder="First Name">
+                  </div>
+                  <div class="col-4">
+                    <input class="form-control" placeholder="Middle Name">
+                  </div>
+                  <div class="col-4">
+                    <input class="form-control" placeholder="Last Name">
+                   </div>
                 </div>
-              </div>
-              <div class="row mb-3">
-                <label class="form-label text-capitalize">Full Name</label>
-                <div class="col-4">
-                  <input class="form-control" placeholder="First Name">
+                <div class="row mb-3">
+                  <div class="col-4">
+                    <label class="form-label text-capitalize">Email</label>
+                    <input class="form-control" placeholder="Email">
+                  </div>
+                  <div class="col-4">
+                    <label class="form-label text-capitalize">Phone Number</label>
+                    <input class="form-control" placeholder="Phone Number">
+                  </div>
                 </div>
-                <div class="col-4">
-                  <input class="form-control" placeholder="Middle Name">
+                <div>
+                  <label class="form-label text-capitalize">Are you married?</label>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input custom-switch" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Yes</label>
+                  </div>
+                  <div class="form-check form-switch mb-2">
+                    <input class="form-check-input custom-switch" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">No</label>
+                  </div>
                 </div>
-                <div class="col-4">
-                  <input class="form-control" placeholder="Last Name">
-                 </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-4">
-                  <label class="form-label text-capitalize">Email</label>
-                  <input class="form-control" placeholder="Email">
+                <div class="row mb-3">
+                  <label class="form-label text-capitalize">Spouse’s Name</label>
+                  <div class="col-4">
+                    <input class="form-control" placeholder="First Name">
+                  </div>
+                  <div class="col-4">
+                    <input class="form-control" placeholder="Middle Name">
+                  </div>
+                  <div class="col-4">
+                    <input class="form-control" placeholder="Last Name">
+                   </div>
                 </div>
-                <div class="col-4">
-                  <label class="form-label text-capitalize">Phone Number</label>
-                  <input class="form-control" placeholder="Phone Number">
+                <div class="row mb-3">
+                  <div class="col-4">
+                    <label class="form-label text-capitalize">Spouse’s Email</label>
+                    <input class="form-control" placeholder="Email">
+                  </div>
+                  <div class="col-4">
+                    <label class="form-label text-capitalize">Spouse’s Phone Number</label>
+                    <input class="form-control" placeholder="Phone Number">
+                  </div>
                 </div>
-              </div>
-              <div>
-                <label class="form-label text-capitalize">Are you married?</label>
-                <div class="form-check form-switch">
-                  <input class="form-check-input custom-switch" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-                  <label class="form-check-label" for="flexSwitchCheckChecked">Yes</label>
-                </div>
-                <div class="form-check form-switch">
-                  <input class="form-check-input custom-switch" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                  <label class="form-check-label" for="flexSwitchCheckDefault">No</label>
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label class="form-label text-capitalize">Spouse’s Name</label>
-                <div class="col-4">
-                  <input class="form-control" placeholder="First Name">
-                </div>
-                <div class="col-4">
-                  <input class="form-control" placeholder="Middle Name">
-                </div>
-                <div class="col-4">
-                  <input class="form-control" placeholder="Last Name">
-                 </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-4">
-                  <label class="form-label text-capitalize">Spouse’s Email</label>
-                  <input class="form-control" placeholder="Email">
-                </div>
-                <div class="col-4">
-                  <label class="form-label text-capitalize">Spouse’s Phone Number</label>
-                  <input class="form-control" placeholder="Phone Number">
-                </div>
-              </div>
-              <button class="btn btn-primary btn-md pe-4 ps-4">Next</button>
+              </form>
+              <button class="btn btn-primary btn-md pe-4 ps-4" (click)="next()">Next</button>
             </div>
           </div>
         </div>

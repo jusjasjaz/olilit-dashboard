@@ -7,6 +7,8 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterMerchantComponent } from './auth/register-merchant/register-merchant.component';
 import { SignupComponent } from './signup/signup.component';
 import { SignUpStepOneComponent } from './signup-completion/sign-up-step-one/sign-up-step-one.component';
+import { SignUpStepTwoComponent } from './signup-completion/sign-up-step-two/sign-up-step-two.component';
+import { SignUpStepThreeComponent } from './signup-completion/sign-up-step-three/sign-up-step-three.component';
 
 const routes: Routes = [
   {
@@ -55,6 +57,14 @@ const routes: Routes = [
   {
     path: "sign-up-completion-step-one",
     component: SignUpStepOneComponent
+  },
+  {
+    path: "sign-up-completion-step-two",
+    component: SignUpStepTwoComponent,
+  },
+  {
+    path: "sign-up-completion-step-three",
+    component: SignUpStepThreeComponent,
   },
 ];
 
