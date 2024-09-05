@@ -11,11 +11,10 @@ export class SignUpStepThreeComponent implements OnInit {
   months:  any = [];
   dates:  any = [];
   years:  any = [];
-  amounts:  any = [];
-  selectedMonth: string = '';
-  selectedDate: string = '';
-  selectedYear: string = '';
-  selectedAmounts: string = '';
+  selectedMonth: any = null;
+  selectedDate: any = null;
+  selectedYear: any = null;
+  selectedAmounts: any = null;
 
   constructor(
     private router: Router,
@@ -25,15 +24,13 @@ export class SignUpStepThreeComponent implements OnInit {
     this.loadMonths();
     this.loadDates();
     this.loadYears();
-    this.loadAmounts();
   }
 
-  loadAmounts() {
-    this.amounts = [
-      { id: '1', name: 'Amount 1' },
-      { id: '2', name: 'Amount 2' },
-    ];
-  }
+  amounts = [
+    { id: '1', name: 'Amount 1' },
+    { id: '2', name: 'Amount 2' },
+  ];
+
 
   loadMonths() {
     this.months = Array.from({ length: 12 }, (_, i) => ({ id: i + 1, name: (i + 1).toString() }));

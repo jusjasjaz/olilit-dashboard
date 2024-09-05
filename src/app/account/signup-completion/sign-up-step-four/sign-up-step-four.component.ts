@@ -8,29 +8,24 @@ import { Router } from '@angular/router';
 })
 export class SignUpStepFourComponent implements OnInit {
 
-  personLimit:  any = [];
-  accidentLimit:  any = [];
   months:  any = [];
   dates:  any = [];
   years:  any = [];
-  claimants: any = [];
-  selectedMonth: string = '';
-  selectedDate: string = '';
-  selectedYear: string = '';
-  selectedPersonLimit: string = '';
-  selectedAccidentLimit: string = '';
-  selectClaimants: string = '';
+  selectedMonth: any = null;
+  selectedDate: any = null;
+  selectedYear: any = null;
+  selectedPersonLimit: any = null;
+  selectedAccidentLimit: any = null;
+  selectClaimants: any = null;
+  
   constructor(
     private router: Router,
   ) { }
 
   ngOnInit(): void {
-    this.loadPersonLimit();
-    this.loadAccidentLimit();
     this.loadMonths();
     this.loadDates();
     this.loadYears();
-    this.loadClaimants();
   }
 
   loadMonths() {
@@ -46,27 +41,20 @@ export class SignUpStepFourComponent implements OnInit {
     this.years = Array.from({ length: 10 }, (_, i) => ({ id: currentYear - i, name: (currentYear - i).toString() }));
   }
 
-  loadPersonLimit() {
-    this.personLimit = [
-      { id: '1', name: 'Choice 1' },
-      { id: '2', name: 'Choice 2' },
-    ];
-  }
+  personLimit = [
+    { id: '1', name: 'Choice 1' },
+    { id: '2', name: 'Choice 2' },
+  ];
 
-  loadAccidentLimit() {
-    this.accidentLimit = [
-      { id: '1', name: 'Choice 1' },
-      { id: '2', name: 'Choice 2' },
-    ];
-  }
+  accidentLimit = [
+    { id: '1', name: 'Choice 1' },
+    { id: '2', name: 'Choice 2' },
+  ];
 
-  loadClaimants() {
-    this.claimants = [
-      { id: '1', name: 'Choice 1' },
-      { id: '2', name: 'Choice 2' },
-    ];
-  }
-
+  claimants = [
+    { id: '1', name: 'Choice 1' },
+    { id: '2', name: 'Choice 2' },
+  ];
 
 
   signIn() {

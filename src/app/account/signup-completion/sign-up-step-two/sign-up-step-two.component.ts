@@ -10,11 +10,11 @@ export class SignUpStepTwoComponent implements OnInit {
   months:  any = [];
   dates:  any = [];
   years:  any = [];
-  states:  any = [];
-  selectedMonth: string = '';
-  selectedDate: string = '';
-  selectedYear: string = '';
-  selectedState: string = '';
+  selectedMonth: any = null;
+  selectedDate: any = null;
+  selectedYear: any = null;
+  selectedState: any = null;
+  
   constructor(
     private router: Router,  private translate: TranslateService,
   ) { }
@@ -23,15 +23,12 @@ export class SignUpStepTwoComponent implements OnInit {
     this.loadMonths();
     this.loadDates();
     this.loadYears();
-    this.loadStates();
   }
 
-  loadStates() {
-    this.states= [
-      { id: '1', name: 'State 1' },
-      { id: '2', name: 'State 2' },
-    ];
-  }
+  states = [
+    { id: '1', name: 'Amount 1' },
+    { id: '2', name: 'Amount 2' },
+  ];
 
   loadMonths() {
     this.months = Array.from({ length: 12 }, (_, i) => ({ id: i + 1, name: (i + 1).toString() }));
