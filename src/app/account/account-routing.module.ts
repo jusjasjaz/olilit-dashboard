@@ -9,6 +9,10 @@ import { SignupComponent } from './signup/signup.component';
 import { SignUpStepOneComponent } from './signup-completion/sign-up-step-one/sign-up-step-one.component';
 import { SignUpStepTwoComponent } from './signup-completion/sign-up-step-two/sign-up-step-two.component';
 import { SignUpStepThreeComponent } from './signup-completion/sign-up-step-three/sign-up-step-three.component';
+import { SignUpStepFourComponent } from './signup-completion/sign-up-step-four/sign-up-step-four.component';
+import { SignUpStepFiveComponent } from './signup-completion/sign-up-step-five/sign-up-step-five.component';
+import { SignUpStepSixComponent } from './signup-completion/sign-up-step-six/sign-up-step-six.component';
+import { SignUpStepSuccessComponent } from './signup-completion/sign-up-step-success/sign-up-step-success.component';
 
 const routes: Routes = [
   {
@@ -65,6 +69,22 @@ const routes: Routes = [
   {
     path: "sign-up-completion-step-three",
     component: SignUpStepThreeComponent,
+  },
+  {
+    path: "sign-up-completion-step-four",
+    component: SignUpStepFourComponent
+  },
+  {
+    path: "sign-up-completion-step-five",
+    component: SignUpStepFiveComponent,
+  },
+  {
+    path: "sign-up-completion-step-six",
+    component: SignUpStepSixComponent,
+  },
+  {
+    path: "sign-up-completion-success",
+    component: SignUpStepSuccessComponent,
   },
 ];
 

@@ -21,6 +21,10 @@ import { SignUpStepOneComponent } from './signup-completion/sign-up-step-one/sig
 import { SignUpStepTwoComponent } from './signup-completion/sign-up-step-two/sign-up-step-two.component';
 import { SignUpStepThreeComponent } from './signup-completion/sign-up-step-three/sign-up-step-three.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { SignUpStepFourComponent } from './signup-completion/sign-up-step-four/sign-up-step-four.component';
+import { SignUpStepFiveComponent } from './signup-completion/sign-up-step-five/sign-up-step-five.component';
+import { SignUpStepSixComponent } from './signup-completion/sign-up-step-six/sign-up-step-six.component';
+import { SignUpStepSuccessComponent } from './signup-completion/sign-up-step-success/sign-up-step-success.component';
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
@@ -34,6 +38,10 @@ export function createTranslateLoader(http: HttpClient): any {
     SignUpStepOneComponent,
     SignUpStepTwoComponent,
     SignUpStepThreeComponent,
+    SignUpStepFourComponent,
+    SignUpStepFiveComponent,
+    SignUpStepSixComponent,
+    SignUpStepSuccessComponent,
   ],
   imports: [
     CommonModule,

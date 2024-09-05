@@ -53,7 +53,7 @@ export class SignUpStepThreeComponent implements OnInit {
   }
 
   next() {
-    this.router.navigate(['']);
+    this.router.navigate(['/auth/sign-up-completion-step-four']);
   }
 
   previous() {

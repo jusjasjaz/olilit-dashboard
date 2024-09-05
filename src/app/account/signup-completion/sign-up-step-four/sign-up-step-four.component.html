@@ -1,0 +1,211 @@
+<div class="d-flex justify-content-between align-items-start p-4">
+  <div class="left-header-container">
+      <img src="./../../../assets/images/logo/logo-icon-only.png"/>
+  </div>
+  <div class="right-header-container">
+      <a class="a-link text-muted px-2">Already a Member?</a>
+      <button class="btn btn-primary btn-md text-dark" (click)="signIn()">Sign In</button>
+  </div>
+</div>
+<div class="auth-page-wrapper pt-3">  
+  <div class="auth-page-content">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-6 col-xl-12">
+          <div class="card mt-4">
+            <div class="card-body p-4">
+              <div class="text-center">
+                <h5 class="text-dark fs-20">Sign Up</h5>
+              </div>
+              <!-- wip for the progress step bar  -->
+              <form>
+                <div class="mb-3">
+                  <label class="form-label text-capitalize">Use of Funds</label>
+                  <textarea class="form-control no-resize" rows="5" placeholder="Briefly describe how you intend to use the funds."></textarea>
+                  <!-- <div class="mt-4">
+                    <span class='text-danger'>This field is required. </span>
+                  </div> -->
+                </div>
+                <div class="text-dark fs-20 fw-bold mb-3">Your Insurance Information</div>
+                <div class="mb-3">
+                  <label class="form-label text-capitalize">Your insurance company name*</label>
+                  <input class="form-control" placeholder="Company Name">
+                </div>
+                <div class="fs-12 fw-bold mb-3">Your Insurance Policy’s Bodily Injury Limits’ [i.e., $50,000 / $100,000]</div>
+                <div class="row mb-3">
+                  <div class="col-4">
+                    <label class="form-label text-capitalize">Per person limit</label>
+                    <ng-select 
+                      [items]="personLimit" 
+                      bindLabel="name"
+                      [(ngModel)]="selectedPersonLimit" 
+                      [clearable]="false">
+                    </ng-select>
+                  </div>
+                  <div class="col-4">
+                    <label class="form-label text-capitalize">Per accident limit</label>
+                    <ng-select 
+                      [items]="accidentLimit" 
+                      bindLabel="name"
+                      [(ngModel)]="selectedAccidentLimit" 
+                      [clearable]="false">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="text-dark fs-20 fw-bold mb-3">Adverse Party Information</div>
+                <div class="mb-3">
+                  <label class="form-label text-capitalize">At-fault drivers name*</label>
+                  <input class="form-control" placeholder="Drivers Name">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label text-capitalize">Their insurance company’s name</label>
+                  <input class="form-control" placeholder="Company Name">
+                </div>
+                <div class="row mb-3">
+                  <div class="col-4">
+                    <label class="form-label text-capitalize">Per person limit</label>
+                    <ng-select 
+                      [items]="personLimit" 
+                      bindLabel="name"
+                      [(ngModel)]="selectedPersonLimit" 
+                      [clearable]="false">
+                    </ng-select>
+                  </div>
+                  <div class="col-4">
+                    <label class="form-label text-capitalize">Per accident limit</label>
+                    <ng-select 
+                      [items]="accidentLimit" 
+                      bindLabel="name"
+                      [(ngModel)]="selectedAccidentLimit" 
+                      [clearable]="false">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label text-capitalize">Date of Accident</label>
+                  <div class="d-flex gap-1"  *ngIf="months.length > 0 && dates.length > 0 && years.length > 0">
+                    <ng-select 
+                      placeholder="MM" 
+                      [items]="months" 
+                      bindLabel="name"
+                      [(ngModel)]="selectedMonth" 
+                      [clearable]="false">
+                    </ng-select>
+                    <ng-select 
+                      placeholder="DD" 
+                      [items]="dates" 
+                      bindLabel="name"
+                      [(ngModel)]="selectedDate" 
+                      [clearable]="false">
+                    </ng-select>
+                    <ng-select 
+                      placeholder="YYYY" 
+                      [items]="years" 
+                      bindLabel="name"
+                      [(ngModel)]="selectedYear" 
+                      [clearable]="false">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="row ">
+                  <div class="col-4">
+                    <label class="form-label text-capitalize">Number of Claimants</label>
+                    <ng-select 
+                      placeholder="" 
+                      [items]="claimants" 
+                      bindLabel="name"
+                      [(ngModel)]="selectClaimants" 
+                      [clearable]="false">
+                    </ng-select>
+                    <p class="text-muted fs-10 mt-2">Please enter a number from 1 to 999.</p>
+                  </div>
+                </div>
+                <div class="text-dark fs-20 fw-bold mb-3">Law Firm</div>
+                <div class="mb-3">
+                  <label class="form-label text-capitalize">Your Law Firm’s Name*</label>
+                  <input class="form-control" placeholder="Drivers Name">
+                </div>
+                <div class="row mb-3">
+                  <label class="form-label text-capitalize">Your Attorney’s Name*</label>
+                  <div class="col-4">
+                    <input class="form-control" placeholder="First">
+                  </div>
+                  <div class="col-4">
+                    <input class="form-control" placeholder="Last">
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label text-capitalize">Date Firm Retained*</label>
+                  <div class="d-flex gap-1"  *ngIf="months.length > 0 && dates.length > 0 && years.length > 0">
+                    <ng-select 
+                      placeholder="MM" 
+                      [items]="months" 
+                      bindLabel="name"
+                      [(ngModel)]="selectedMonth" 
+                      [clearable]="false">
+                    </ng-select>
+                    <ng-select 
+                      placeholder="DD" 
+                      [items]="dates" 
+                      bindLabel="name"
+                      [(ngModel)]="selectedDate" 
+                      [clearable]="false">
+                    </ng-select>
+                    <ng-select 
+                      placeholder="YYYY" 
+                      [items]="years" 
+                      bindLabel="name"
+                      [(ngModel)]="selectedYear" 
+                      [clearable]="false">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-4">
+                    <label class="form-label text-capitalize">Attorney Phone*</label>
+                    <input class="form-control" placeholder="Phone">
+                  </div>
+                  <div class="col-4">
+                    <label class="form-label text-capitalize">Email</label>
+                    <input class="form-control" placeholder="Last">
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label text-capitalize">Have you filed bankruptcy of do you intend to file in the future?*</label>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input custom-switch" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Yes</label>
+                  </div>
+                  <div class="form-check form-switch mb-2">
+                    <input class="form-check-input custom-switch" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">No</label>
+                  </div>
+                </div>
+              </form>
+              <button class="btn btn-primary btn-md pe-4 ps-4 me-2" (click)="previous()">Previous</button>
+              <button class="btn btn-primary btn-md pe-4 ps-4" (click)="next()">Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4 text-center">
+        <div class="text-muted">
+            <a class="text-muted text-capitalize fs-12">Terms & Conditions</a>
+            <span class="text-capitalize fs-12">    |    </span>
+            <a class="text-muted text-capitalize fs-12">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="right-header-container">
+        <div class="row align-items-center">
+            <div class="col-auto text-muted">Powered by:</div>
+            <div class="col-auto">
+                <img src="./../../../assets/images/logo/logo-legal-sync-dark.svg" alt="Logo"/>
+            </div>
+        </div>
+    </div>
+  </footer>
+</div>
+

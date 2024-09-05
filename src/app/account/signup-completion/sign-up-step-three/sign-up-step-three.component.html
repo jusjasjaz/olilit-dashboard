@@ -41,7 +41,7 @@
                 <!-- Date of Accident -->
                   <div class="mb-3">
                     <label class="form-label text-capitalize">Date of Accident</label>
-                    <div class="d-flex gap-1">
+                    <div class="d-flex gap-1"  *ngIf="months.length > 0 && dates.length > 0 && years.length > 0">
                       <ng-select 
                         placeholder="MM" 
                         [items]="months" 
