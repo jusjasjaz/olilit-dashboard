@@ -7,13 +7,14 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
   styleUrls: ['./sign-up-step-two.component.scss']
 })
 export class SignUpStepTwoComponent implements OnInit {
-  months: any[] = [];
-  dates: any[] = [];
-  years: any[] = [];
+  months:  any = [];
+  dates:  any = [];
+  years:  any = [];
+  states:  any = [];
   selectedMonth: string = '';
   selectedDate: string = '';
   selectedYear: string = '';
-
+  selectedState: string = '';
   constructor(
     private router: Router,  private translate: TranslateService,
   ) { }
@@ -22,23 +23,18 @@ export class SignUpStepTwoComponent implements OnInit {
     this.loadMonths();
     this.loadDates();
     this.loadYears();
+    this.loadStates();
+  }
+
+  loadStates() {
+    this.states= [
+      { id: '1', name: 'State 1' },
+      { id: '2', name: 'State 2' },
+    ];
   }
 
   loadMonths() {
-    this.months = [
-      { id: '1', name: 'January' },
-      { id: '2', name: 'February' },
-      { id: '3', name: 'March' },
-      { id: '4', name: 'April' },
-      { id: '5', name: 'May' },
-      { id: '6', name: 'June' },
-      { id: '7', name: 'July' },
-      { id: '8', name: 'August' },
-      { id: '9', name: 'September' },
-      { id: '10', name: 'October' },
-      { id: '11', name: 'November' },
-      { id: '12', name: 'December' }
-    ];
+    this.months = Array.from({ length: 12 }, (_, i) => ({ id: i + 1, name: (i + 1).toString() }));
   }
 
   loadDates() {

@@ -22,6 +22,9 @@
                 <div class="mb-3">
                   <label class="form-label text-capitalize">Use of Funds</label>
                   <textarea class="form-control no-resize" rows="5" placeholder="Briefly describe how you intend to use the funds."></textarea>
+                  <!-- <div class="mt-4">
+                    <span class='text-danger'>This field is required. </span>
+                  </div> -->
                 </div>
                 <div>
                   <label class="form-label text-capitalize">Have you had any prior accidents?*</label>
@@ -33,7 +36,38 @@
                     <input class="form-check-input custom-switch" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked>
                     <label class="form-check-label" for="flexSwitchCheckDefault">No</label>
                   </div>
+                  
                 </div>
+                <!-- Date of Accident -->
+                  <div class="mb-3">
+                    <label class="form-label text-capitalize">Date of Accident</label>
+                    <div class="d-flex gap-1">
+                      <ng-select 
+                        placeholder="MM" 
+                        [items]="months" 
+                        bindLabel="name"
+                        [(ngModel)]="selectedMonth" 
+                        [clearable]="false">
+                      </ng-select>
+                      <ng-select 
+                        placeholder="DD" 
+                        [items]="dates" 
+                        bindLabel="name"
+                        [(ngModel)]="selectedDate" 
+                        [clearable]="false">
+                      </ng-select>
+                      <ng-select 
+                        placeholder="YYYY" 
+                        [items]="years" 
+                        bindLabel="name"
+                        [(ngModel)]="selectedYear" 
+                        [clearable]="false">
+                      </ng-select>
+                    </div>
+                    <!-- <div class="mt-4">
+                      <span class='text-danger'>This field is required. Please complete the following fields: Month, Day, Year.</span>
+                    </div> -->
+                  </div>
                 <div>
                   <label class="form-label text-capitalize">Any current advances or liens on your case?*</label>
                   <div class="form-check form-switch">
@@ -43,6 +77,21 @@
                   <div class="form-check form-switch mb-2">
                     <input class="form-check-input custom-switch" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked>
                     <label class="form-check-label" for="flexSwitchCheckDefault">No</label>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-4">
+                      <label class="form-label text-capitalize">Name of advance or lein company*</label>
+                      <input class="form-control" placeholder="Company Name">
+                    </div>
+                    <div class="col-4">
+                      <label class="form-label text-capitalize">Amount of advance or lien*</label>
+                      <ng-select 
+                        [items]="amounts" 
+                        bindLabel="name"
+                        [(ngModel)]="selectedAmounts" 
+                        [clearable]="false">
+                      </ng-select>
+                    </div>
                   </div>
                 </div>
                 <div>

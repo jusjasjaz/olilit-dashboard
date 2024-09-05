@@ -31,7 +31,13 @@
                     <input class="form-control" placeholder="City">
                   </div>
                   <div class="col-4">
-                    <input class="form-control" placeholder="State">
+                    <ng-select 
+                      placeholder="States" 
+                      [items]="states" 
+                      bindLabel="name"
+                      [(ngModel)]="selectedMonth" 
+                      [clearable]="false">
+                    </ng-select>
                   </div>
                   <div class="col-4">
                     <input class="form-control" placeholder="Zip Code">
@@ -46,21 +52,21 @@
                     <label class="form-label text-capitalize">Date of Birth</label>
                     <div class="d-flex gap-1">
                       <ng-select 
-                        placeholder="Months" 
+                        placeholder="MM" 
                         [items]="months" 
                         bindLabel="name"
                         [(ngModel)]="selectedMonth" 
                         [clearable]="false">
                       </ng-select>
                       <ng-select 
-                        placeholder="Date" 
+                        placeholder="DD" 
                         [items]="dates" 
                         bindLabel="name"
                         [(ngModel)]="selectedDate" 
                         [clearable]="false">
                       </ng-select>
                       <ng-select 
-                        placeholder="Years" 
+                        placeholder="YYYY" 
                         [items]="years" 
                         bindLabel="name"
                         [(ngModel)]="selectedYear" 
