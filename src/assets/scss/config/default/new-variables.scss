@@ -1,3 +1,5 @@
+$variable-prefix:             vz-;
+
 // Color variables
 $white:    #fff;
 $gray-100: #f3f6f9;
@@ -26,9 +28,9 @@ $grays: (
 
 $primary-color:   #8BC240;
 $secondary-color: #0D1E34;
+$success-color:   #29A46A;
 $danger-color:    #E14D4D;
 $warning-color:   #f7b84b;
-$success-color:   #29A46A;
 $dark-color:      #171717;
 $dark-gray-color: #FFC412;
 
@@ -36,9 +38,9 @@ $dark-gray-color: #FFC412;
 $colors: (
   "primary":    $primary-color,
   "secondary":  $secondary-color,
+  "success":    $success-color,
   "danger":     $danger-color,
   "warning":    $warning-color,
-  "success":    $success-color,
   "light":      $gray-100,
   "dark":       $dark-color,
   "dark-gray":  $dark-gray-color,
@@ -70,13 +72,7 @@ $theme-colors: (
 );
 
 // Converting theme colors to RGB values
-$theme-colors-rgb: ();
 
-@each $name, $color in $theme-colors {
-  $theme-colors-rgb: map-merge($theme-colors-rgb, (
-    $name: to-rgb($color)
-  ));
-}
 // scss-docs-end theme-colors-rgb
 
 // The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
@@ -138,7 +134,16 @@ $success-color-700: shade-color($success-color, 40%);
 $success-color-800: shade-color($success-color, 60%);
 $success-color-900: shade-color($success-color, 80%);
 
+
 //font variable
 $font-family-secondary:                             'Inter', sans-serif;
 
 $vertical-menu-item-font-family:                  $font-family-secondary;
+
+$theme-colors-rgb: ();
+
+@each $name, $color in $theme-colors {
+  $theme-colors-rgb: map-merge($theme-colors-rgb, (
+    $name: to-rgb($color)
+  ));
+};

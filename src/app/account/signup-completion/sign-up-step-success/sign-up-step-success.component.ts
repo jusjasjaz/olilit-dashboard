@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up-step-success',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SignUpStepSuccessComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  signIn() {
+    this.router.navigate(['/auth/login']);
+  }
+
+  next() {
+    this.router.navigate(['/auth/login']);
   }
 
 }
