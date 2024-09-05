@@ -26,8 +26,8 @@ export class SignUpStepTwoComponent implements OnInit {
   }
 
   states = [
-    { id: '1', name: 'Amount 1' },
-    { id: '2', name: 'Amount 2' },
+    { id: '1', name: 'State 1' },
+    { id: '2', name: 'State 2' },
   ];
 
   loadMonths() {
