@@ -461,6 +461,11 @@ export class DashboardComponent implements OnInit {
       }
   }
 
-  
+  caseData = [
+    { title: 'Case ID 003', status: 'new', receivedDate: '15 Jul 2024', createdBy: 'Henry Smith' },
+    { title: 'Case ID 003', status: 'new', receivedDate: '15 Jul 2024', createdBy: 'Henry Smith' },
+    { title: 'Case ID 003', status: 'new', receivedDate: '15 Jul 2024', createdBy: 'Henry Smith' },
+    { title: 'Case ID 003', status: 'new', receivedDate: '15 Jul 2024', createdBy: 'Henry Smith' }
+  ];
 
 }
